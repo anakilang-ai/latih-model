@@ -1,5 +1,5 @@
 import pandas as pd
-from transformers import GPT2Tokenizer, b, Trainer, TrainingArguments
+from transformers import GPT2Tokenizer, Trainer, TrainingArguments
 import torch
 import csv
 
