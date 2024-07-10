@@ -63,7 +63,7 @@ trainer = Trainer(
     data_collator=data_collator,
 )
 
-# Melatih model
+#Training the model
 trainer.train()
 
 # Menyimpan model dan tokenizer
