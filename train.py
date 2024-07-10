@@ -90,7 +90,7 @@ def predict(question, answer):
 
     return predicted_class
 
-#Example of using Predictions
+#Example using predictions
 question = "cara minta transkrip nilai"
 answer = "Yth. Kepala Bagian Akademik Universitas XYZdi TempatDengan hormat,Mahasiswa Universitas XYZ, Nama saya [Nama], dengan NIM [NIM]. Saya ingin meminta transkrip nilai semester [semester] yang telah saya tempuh.Demikian surat permohonan ini saya sampaikan, atas perhatian dan kerjasamanya saya ucapkan terima kasih.Hormat saya [Nama]"
 
