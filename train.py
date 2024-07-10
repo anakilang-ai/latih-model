@@ -66,7 +66,7 @@ trainer = Trainer(
 #Training the model
 trainer.train()
 
-# Menyimpan model dan tokenizer
+#Saves the model and tokenizer
 model.save_pretrained("./model")
 tokenizer.save_pretrained("./model")
 
