@@ -12,7 +12,7 @@ text = "Saya sangat senang dengan layanan ini!"
 # Text Tokenization
 inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
 
-# Make predictions
+# Make Predictions
 with torch.no_grad():
     outputs = model(**inputs)
     logits = outputs.logits
