@@ -68,7 +68,7 @@ train_dataset = tf.data.Dataset.from_tensor_slices(((train_inputs, train_masks),
 val_dataset = tf.data.Dataset.from_tensor_slices(((val_inputs, val_masks), val_labels)).batch(16)
 test_dataset = tf.data.Dataset.from_tensor_slices(((test_inputs, test_masks), test_labels)).batch(16)
 
-# Load Model
+# load model
 model = TFRobertaForSequenceClassification.from_pretrained('roberta-base', num_labels=len(label_encoder.classes_))
 
 # Custom Train Step
