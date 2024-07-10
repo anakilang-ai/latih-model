@@ -7,7 +7,7 @@ tokenizer = RobertaTokenizer.from_pretrained(model_save_path)
 model = RobertaForSequenceClassification.from_pretrained(model_save_path)
 
 # Example of text to be classified
-text = "Saya sangat senang dengan layanan ini!"
+text = "Saya sangat senang dengan layanan ini"
 
 # Text Tokenization
 inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
