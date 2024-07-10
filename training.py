@@ -20,7 +20,7 @@ with torch.no_grad():
 # Mendapatkan prediksi label (0 atau 1)
 predicted_class = torch.argmax(logits, dim=1).item()
 
-# Menampilkan hasil
+# Menampilkan Hasil
 label_map = {0: "Negatif", 1: "Positif"}
 print(f"Teks: {text}")
 print(f"Prediksi Sentimen: {label_map[predicted_class]}")
