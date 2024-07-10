@@ -117,6 +117,6 @@ for epoch in range(epochs):
     print(f"Validation loss after epoch {epoch + 1}: {val_loss:.4f}")
     print(f"Validation accuracy after epoch {epoch + 1}: {val_accuracy:.4f}")
 
-# Save the model
+# Save model
 model.save_pretrained('roberta_model')
 tokenizer.save_pretrained('roberta_model')
