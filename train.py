@@ -24,7 +24,7 @@ model_name = "roberta-base"
 tokenizer = RobertaTokenizer.from_pretrained(model_name)
 model = RobertaForSequenceClassification.from_pretrained(model_name, num_labels=2)
 
-#Data preprocessing
+#preprocessing data
 def preprocess_function(examples):
     inputs = tokenizer(
         examples['question'], 
