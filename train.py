@@ -15,7 +15,7 @@ df['label'] = df.index % 2  # For example, using indexes as temporary labels
 # Pisahkan data menjadi pelatihan dan pengujian
 train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
 
-#Create Hugging Face dataset
+# create hugging face dataset
 train_dataset = Dataset.from_pandas(train_df)
 test_dataset = Dataset.from_pandas(test_df)
 
