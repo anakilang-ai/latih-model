@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from datasets import Dataset
 import torch
 
-# Memuat dataset
+# Memuat dataset 
 df = pd.read_csv('lar-clean.csv', delimiter='|', names=['question', 'answer'], encoding='utf-8', quoting=csv.QUOTE_NONE)
 
 # Membuat label biner (0 atau 1) dari data jawaban, jika diperlukan
