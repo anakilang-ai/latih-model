@@ -70,7 +70,7 @@ test_dataset = tf.data.Dataset.from_tensor_slices(((test_inputs, test_masks), te
 # Load Model
 model = TFRobertaForSequenceClassification.from_pretrained('roberta-base', num_labels=len(label_encoder.classes_))
 
-# Custom train step
+# Custom Train Step
 @tf.function
 def train_step(model, optimizer, loss_fn, accuracy_metric, x, y):
     with tf.GradientTape() as tape:
