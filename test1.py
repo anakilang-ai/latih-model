@@ -8,7 +8,7 @@ import csv
 tokenizer = RobertaTokenizer.from_pretrained('roberta_model')
 model = TFRobertaForSequenceClassification.from_pretrained('roberta_model')
 
-# Muat label Encoder
+#Muat label Encoder
 with open('rf1.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file, delimiter='|')
     filtered_rows = [row for row in reader if len(row) == 2 and row[0].strip() != "" and row[1].strip() != ""]
