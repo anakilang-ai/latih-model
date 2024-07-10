@@ -20,7 +20,7 @@ print(f"Number of valid rows: {len(df)}")
 label_encoder = LabelEncoder()
 df['encoded_answer'] = label_encoder.fit_transform(df['answer'])
 
-# Prepare the dataset
+# Siapkan kumpulan data
 tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
 input_ids = []
 attention_masks = []
