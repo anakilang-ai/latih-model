@@ -40,7 +40,7 @@ def preprocess_function(examples):
 train_dataset = train_dataset.map(preprocess_function, batched=True)
 test_dataset = test_dataset.map(preprocess_function, batched=True)
 
-#Data collator
+# make Data collator
 data_collator = DataCollatorWithPadding(tokenizer)
 
 #The training argument
