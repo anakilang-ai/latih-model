@@ -7,7 +7,7 @@ model_save_path = "./model"
 tokenizer = RobertaTokenizer.from_pretrained(model_save_path)
 model = RobertaForSequenceClassification.from_pretrained(model_save_path)
 
-#Example of text to be classified
+#Contoh teks yang akan diklasifikasikan
 text = "Saya sangat senang dengan layanan yang ada! "
 
 #Text Tokenization
