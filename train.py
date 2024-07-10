@@ -64,7 +64,7 @@ trainer = Trainer(
     data_collator=data_collator,
 )
 
-#Training the model
+# make Training the model
 trainer.train()
 
 #Saves the model and tokenizer
