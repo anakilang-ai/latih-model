@@ -8,7 +8,7 @@ import torch
 # Load dataset
 df = pd.read_csv('lar-clean.csv', delimiter='|', names=['question', 'answer'], encoding='utf-8', quoting=csv.QUOTE_NONE)
 
-# Membuat label biner (0 atau 1) dari data jawaban jika diperlukan
+# Create binary labels (0 or 1) from answer data if necessary
 df['label'] = df.index % 2  # Misalnya, menggunakan indeks sebagai label sementara
 
 # Split data menjadi train dan test
