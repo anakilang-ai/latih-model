@@ -42,7 +42,7 @@ input_ids = tf.concat(input_ids, axis=0)
 attention_masks = tf.concat(attention_masks, axis=0)
 labels = tf.constant(df['encoded_answer'].values)
 
-# Split the dataset into training, validation, and test sets
+# Pisahkan kumpulan data menjadi kumpulan pelatihan, validasi, dan pengujian
 train_inputs_idx, temp_inputs_idx, train_masks_idx, temp_masks_idx, train_labels_idx, temp_labels_idx = train_test_split(
     range(len(input_ids)), range(len(attention_masks)), range(len(labels)), test_size=0.3, random_state=42
 )
