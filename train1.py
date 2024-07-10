@@ -95,7 +95,7 @@ epochs = 500
 for epoch in range(epochs):
     print(f"Epoch {epoch + 1}/{epochs}")
     accuracy_metric.reset_states()
-    # Training
+    # training
     for step, (x_batch_train, y_batch_train) in enumerate(train_dataset):
         loss = train_step(model, optimizer, loss_fn, accuracy_metric, x_batch_train, y_batch_train)
         if step % 50 == 0:
