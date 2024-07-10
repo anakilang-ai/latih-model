@@ -38,7 +38,7 @@ def predict(question):
     
     return predicted_label
 
-# Calculate accuracy on the test set
+# Calculate accuracy on the test Set
 test_accuracy_metric = tf.keras.metrics.Accuracy()
 
 # Test the model
