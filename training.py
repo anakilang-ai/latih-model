@@ -1,7 +1,7 @@
 import torch
 from transformers import RobertaTokenizer, RobertaForSequenceClassification
 
-# Loading model and tokenizer from "models" folder
+# Loading model and tokenizer from "models" Folders
 model_save_path = "./model"
 tokenizer = RobertaTokenizer.from_pretrained(model_save_path)
 model = RobertaForSequenceClassification.from_pretrained(model_save_path)
