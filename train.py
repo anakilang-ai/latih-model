@@ -43,7 +43,7 @@ test_dataset = test_dataset.map(preprocess_function, batched=True)
 # make Data collator
 data_collator = DataCollatorWithPadding(tokenizer)
 
-#The training argument
+# add The training argument
 training_args = TrainingArguments(
     output_dir="./model",
     evaluation_strategy="epoch",
