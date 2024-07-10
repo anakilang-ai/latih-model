@@ -17,7 +17,7 @@ df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
 label_encoder = LabelEncoder()
 label_encoder.fit(df['answer'])
 
-# Function to make Predictions
+# Function to Make Predictions
 def predict(question):
     encoded = tokenizer.encode_plus(
         question,
