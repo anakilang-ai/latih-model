@@ -85,7 +85,7 @@ def train_step(model, optimizer, loss_fn, accuracy_metric, x, y):
     
     return loss
 
-# Compile the Model
+# Compile the model
 optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5, epsilon=1e-8)
 loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 accuracy_metric = tf.keras.metrics.Accuracy()
