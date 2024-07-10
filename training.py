@@ -17,7 +17,7 @@ with torch.no_grad():
     outputs = model(**inputs)
     logits = outputs.logits
 
-#Get label prediction (0 or 1)
+# Get label prediction (0 or 1)
 predicted_class = torch.argmax(logits, dim=1).item()
 
 # Menampilkan Hasil
