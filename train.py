@@ -70,7 +70,7 @@ trainer.train()
 model.save_pretrained("./model")
 tokenizer.save_pretrained("./model")
 
-# Contoh penggunaan untuk prediksi dengan model yang sudah dilatih
+#Example of use for predictions with pre-trained models
 def predict(question, answer):
     inputs = tokenizer(
         question,
