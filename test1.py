@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import csv
 
-# Load tokenizer and model
+# Load tokenizer &  model
 tokenizer = RobertaTokenizer.from_pretrained('roberta_model')
 model = TFRobertaForSequenceClassification.from_pretrained('roberta_model')
 
