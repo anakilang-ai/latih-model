@@ -63,7 +63,7 @@ train_labels = tf.gather(labels, train_labels_idx)
 val_labels = tf.gather(labels, val_labels_idx)
 test_labels = tf.gather(labels, test_labels_idx)
 
-# Convert TO tf.data.Dataset
+#Convert TO tf.data.Dataset
 train_dataset = tf.data.Dataset.from_tensor_slices(((train_inputs, train_masks), train_labels)).shuffle(len(train_labels)).batch(16)
 val_dataset = tf.data.Dataset.from_tensor_slices(((val_inputs, val_masks), val_labels)).batch(16)
 test_dataset = tf.data.Dataset.from_tensor_slices(((test_inputs, test_masks), test_labels)).batch(16)
