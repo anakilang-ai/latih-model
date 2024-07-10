@@ -39,7 +39,7 @@ def predict(question):
     
     return predicted_label
 
-# Calculate accuracy On the Test Set
+# Hitung akurasi Pada Set Tes
 test_accuracy_metric = tf.keras.metrics.Accuracy()
 
 # Uji modelnya
