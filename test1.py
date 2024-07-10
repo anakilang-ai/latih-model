@@ -75,7 +75,7 @@ test_accuracy_metric.update_state(labels_test, preds_test)
 test_accuracy = test_accuracy_metric.result()
 print(f"Test accuracy: {test_accuracy:.4f}")
 
-# Interactive loop to Get user input & predict
+# Interactive loop to  user input & predict
 while True:
     question = input("Enter a question (or 'exit' to quit): ")
     if question.lower() == 'exit':
