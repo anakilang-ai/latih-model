@@ -51,7 +51,7 @@ val_inputs_idx, test_inputs_idx, val_masks_idx, test_masks_idx, val_labels_idx, 
     temp_inputs_idx, temp_masks_idx, temp_labels_idx, test_size=0.5, random_state=42
 )
 
-# Convert to tensors
+# Konversikan ke tensor
 train_inputs = tf.gather(input_ids, train_inputs_idx)
 val_inputs = tf.gather(input_ids, val_inputs_idx)
 test_inputs = tf.gather(input_ids, test_inputs_idx)
