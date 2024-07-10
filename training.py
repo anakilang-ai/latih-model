@@ -10,7 +10,7 @@ model = RobertaForSequenceClassification.from_pretrained(model_save_path)
 #Contoh teks yang akan diklasifikasikan
 text = "Saya sangat senang dengan layanan yang ada saat ini! "
 
-#Text Tokenization
+#Tokenisasi Teks
 inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
 
 # Make Predictions
