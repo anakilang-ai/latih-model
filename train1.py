@@ -5,7 +5,7 @@ import csv
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-# Muat kumpulan data
+# Load valid data set
 def filter_valid_rows(row):
     return len(row) == 2 and row[0].strip() != "" and row[1].strip() != ""
 
