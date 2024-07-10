@@ -16,7 +16,7 @@ with open('rf1.csv', 'r', encoding='utf-8') as file:
 df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
 print(f"Number of valid rows: {len(df)}")
 
-# Encode the labels (answers) to numeric values
+# Enkode label (jawaban) ke nilai numerik
 label_encoder = LabelEncoder()
 df['encoded_answer'] = label_encoder.fit_transform(df['answer'])
 
