@@ -18,7 +18,7 @@ train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
 train_dataset = Dataset.from_pandas(train_df)
 test_dataset = Dataset.from_pandas(test_df)
 
-# Memuat tokenizer dan model
+#Loading tokenizer and model
 model_name = "roberta-base"
 tokenizer = RobertaTokenizer.from_pretrained(model_name)
 model = RobertaForSequenceClassification.from_pretrained(model_name, num_labels=2)
