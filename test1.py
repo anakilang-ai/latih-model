@@ -41,7 +41,7 @@ def predict(question):
 # Calculate accuracy On the Test Set
 test_accuracy_metric = tf.keras.metrics.Accuracy()
 
-# Test the model
+# Uji modelnya
 with open('rf1.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file, delimiter='|')
     filtered_rows = [row for row in reader if len(row) == 2 and row[0].strip() != "" and row[1].strip() != ""]
