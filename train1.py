@@ -103,7 +103,7 @@ for epoch in range(epochs):
     train_accuracy = accuracy_metric.result()
     print(f"Training accuracy after epoch {epoch + 1}: {train_accuracy:.4f}")
     
-    # Validation
+    # validasi
     val_loss = 0
     accuracy_metric.reset_states()
     for x_batch_val, y_batch_val in val_dataset:
