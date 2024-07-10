@@ -35,7 +35,7 @@ def preprocess_function(examples):
     inputs['labels'] = examples['label']
     return inputs
 
-# Tokenisasi dataset
+#Dataset tokenization
 train_dataset = train_dataset.map(preprocess_function, batched=True)
 test_dataset = test_dataset.map(preprocess_function, batched=True)
 
