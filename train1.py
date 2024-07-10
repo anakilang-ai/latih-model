@@ -89,7 +89,7 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5, epsilon=1e-8)
 loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 accuracy_metric = tf.keras.metrics.Accuracy()
 
-# Training loop with validation
+# Training loop with Validation
 epochs = 500
 for epoch in range(epochs):
     print(f"Epoch {epoch + 1}/{epochs}")
