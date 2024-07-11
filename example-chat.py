@@ -13,3 +13,21 @@ chat_responses = [
     "Kamu suka olahraga apa?",
     "Apa buku favoritmu?"
 ]
+def main():
+    print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
+    
+    while True:
+        # Pilih pesan obrolan acak
+        response = random.choice(chat_responses)
+        print("Bot: " + response)
+        
+        # Minta pengguna untuk memasukkan pesan balasan
+        user_input = input("Anda: ")
+        
+        # Periksa apakah pengguna ingin keluar
+        if user_input.lower() == 'keluar':
+            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
+            break
+
+if __name__ == "__main__":
+    main()
