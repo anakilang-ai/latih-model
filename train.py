@@ -5,25 +5,25 @@ from sklearn.model_selection import train_test_split
 from datasets import Dataset
 import torch
 
-# load dataset train
+# Load dataset
 df = pd.read_csv('lar-clean.csv', delimiter='|', names=['question', 'answer'], encoding='utf-8', quoting=csv.QUOTE_NONE)
 
-# Buat label biner (0 atau 1) dari data jawaban jika perlu
+# Create binary labels (0 or 1) from answer data if needed
 df['label'] = df.index % 2  # For example, using indexes as temporary labels
 
-# Pisahkan data menjadi pelatihan dan pengujian
+# Split data into training and testing
 train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
 
-# create hugging face dataset
+# Create Hugging Face datasets
 train_dataset = Dataset.from_pandas(train_df)
 test_dataset = Dataset.from_pandas(test_df)
 
-#Load tokenizer and model
+# Load tokenizer and model
 model_name = "roberta-base"
 tokenizer = RobertaTokenizer.from_pretrained(model_name)
 model = RobertaForSequenceClassification.from_pretrained(model_name, num_labels=2)
 
-#preprocessing data
+# Preprocessing function
 def preprocess_function(examples):
     inputs = tokenizer(
         examples['question'], 
@@ -35,14 +35,14 @@ def preprocess_function(examples):
     inputs['labels'] = examples['label']
     return inputs
 
-#Dataset token
+# Apply preprocessing
 train_dataset = train_dataset.map(preprocess_function, batched=True)
 test_dataset = test_dataset.map(preprocess_function, batched=True)
 
-# make Data collator
+# Data collator
 data_collator = DataCollatorWithPadding(tokenizer)
 
-# add The training argument
+# Training arguments
 training_args = TrainingArguments(
     output_dir="./model",
     evaluation_strategy="epoch",
@@ -53,7 +53,7 @@ training_args = TrainingArguments(
     weight_decay=0.01,
 )
 
-# add Trainer
+# Trainer
 trainer = Trainer(
     model=model,
     args=training_args,
@@ -63,14 +63,14 @@ trainer = Trainer(
     data_collator=data_collator,
 )
 
-# make Training the model
+# Train the model
 trainer.train()
 
-#Saves the model & tokenizer
+# Save the model and tokenizer
 model.save_pretrained("./model")
 tokenizer.save_pretrained("./model")
 
-#Example of use for predictions with pre trained models
+# Function for making predictions with the trained model
 def predict(question, answer):
     inputs = tokenizer(
         question,
@@ -89,9 +89,9 @@ def predict(question, answer):
 
     return predicted_class
 
-#Example using predictions
+# Example using predictions
 question = "cara minta transkrip nilai"
-answer = "Yth. Kepala Bagian Akademik Universitas XYZdi TempatDengan hormat,Mahasiswa Universitas XYZ, Nama saya [Nama], dengan NIM [NIM]. Saya ingin meminta transkrip nilai semester [semester] yang telah saya tempuh.Demikian surat permohonan ini saya sampaikan, atas perhatian dan kerjasamanya saya ucapkan terima kasih.Hormat saya [Nama]"
+answer = "Yth. Kepala Bagian Akademik Universitas XYZ di Tempat Dengan hormat, Mahasiswa Universitas XYZ, Nama saya [Nama], dengan NIM [NIM]. Saya ingin meminta transkrip nilai semester [semester] yang telah saya tempuh. Demikian surat permohonan ini saya sampaikan, atas perhatian dan kerjasamanya saya ucapkan terima kasih. Hormat saya [Nama]"
 
 predicted_class = predict(question, answer)
 print(f"Pertanyaan: {question}")
