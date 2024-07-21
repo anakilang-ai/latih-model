@@ -1,3 +1,5 @@
+# example-chat.py
+
 import random
 
 # Daftar jawaban acak
