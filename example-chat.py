@@ -1,5 +1,3 @@
-# example-chat.py
-
 import random
 
 # Daftar jawaban acak
@@ -32,5 +30,5 @@ def main():
         response = random.choice(random_answers)
         print("Bot: " + response)
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
