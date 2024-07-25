@@ -2,28 +2,26 @@
 import torch
 from transformers import RobertaTokenizer, RobertaForSequenceClassification
 
-# Define the path to the saved model and tokenizer
-model_directory = "./model"
-tokenizer = RobertaTokenizer.from_pretrained(model_directory)
-model = RobertaForSequenceClassification.from_pretrained(model_directory)
+# Loading model and tokenizer from 'model' Folders
+model_save_path = "./model"
+tokenizer = RobertaTokenizer.from_pretrained(model_save_path)
+model = RobertaForSequenceClassification.from_pretrained(model_save_path)
 
-# Example text for classification
-sample_text = "Saya sangat senang dengan layanan yang ada saat ini!"
+#Contoh teks yang akan diklasifikasikan
+text = "Saya sangat senang dengan layanan yang ada saat ini! "
 
-# Tokenize the input text
-tokens = tokenizer(sample_text, return_tensors="pt", truncation=True, padding=True)
+#Tokenisasi Teks
+inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
 
-# Perform prediction
+#Membuat prediksi
 with torch.no_grad():
-    predictions = model(**tokens)
-    logits = predictions.logits
+    outputs = model(**inputs)
+    logits = outputs.logits
 
-# Determine the predicted class (0/1)
-predicted_label = torch.argmax(logits, dim=1).item()
+#prediksi label (0/1)
+predicted_class = torch.argmax(logits, dim=1).item()
 
-# Define the label mapping
-label_mapping = {0: "Negatif", 1: "Positif"}
-
-# Display the results
-print(f"Teks: {sample_text}")
-print(f"Prediksi Sentimen: {label_mapping[predicted_label]}")
+#Menampilkan Hasil
+label_map = {0: "Negatif", 1: "Positif"}
+print(f"Teks: {text}")
+print(f"Prediksi Sentimen: {label_map[predicted_class]}")
