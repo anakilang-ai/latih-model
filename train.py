@@ -63,12 +63,23 @@ trainer = Trainer(
     data_collator=data_collator,
 )
 
-# make Training the model
+# Train the model
+print("Starting training...")
 trainer.train()
 
-#Saves the model & tokenizer
-model.save_pretrained("./model")
-tokenizer.save_pretrained("./model")
+# Save the model and tokenizer
+print("Saving model and tokenizer...")
+model_save_path = "./model"
+tokenizer_save_path = "./model"
+
+# Save the model
+model.save_pretrained(model_save_path)
+print(f"Model saved to {model_save_path}")
+
+# Save the tokenizer
+tokenizer.save_pretrained(tokenizer_save_path)
+print(f"Tokenizer saved to {tokenizer_save_path}")
+
 
 # Example of use for predictions with pre-trained models
 def predict(question, answer):
