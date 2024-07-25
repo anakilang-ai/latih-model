@@ -70,24 +70,31 @@ trainer.train()
 model.save_pretrained("./model")
 tokenizer.save_pretrained("./model")
 
-#Example of use for predictions with pre trained models
+# Example of use for predictions with pre-trained models
 def predict(question, answer):
+    # Tokenize inputs and prepare tensors for the model
     inputs = tokenizer(
-        question,
-        answer,
+        text=[question],  # Use text parameter for single strings
+        text_pair=[answer],  # Pair question and answer
         truncation=True,
         padding='max_length',
         max_length=512,
         return_tensors="pt"
     )
+    
+    # Ensure the model is in evaluation mode
+    model.eval()
 
+    # Perform prediction without tracking gradients
     with torch.no_grad():
         outputs = model(**inputs)
-
+    
+    # Extract logits and determine the predicted class
     logits = outputs.logits
     predicted_class = torch.argmax(logits, dim=1).item()
-
+    
     return predicted_class
+
 
 # Example using predictions
 question = "cara minta transkrip nilai"
