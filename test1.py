@@ -55,12 +55,9 @@ def calculate_test_accuracy(file_path):
         input_ids_test.append(input_ids)
         attention_masks_test.append(attention_mask)
 
-    input_ids_test.append(encoded['input_ids'])
-    attention_masks_test.append(encoded['attention_mask'])
-
-input_ids_test = tf.concat(input_ids_test, axis=0)
-attention_masks_test = tf.concat(attention_masks_test, axis=0)
-labels_test = tf.constant(df_test['encoded_answer'].values)
+    input_ids_test = tf.concat(input_ids_test, axis=0)
+    attention_masks_test = tf.concat(attention_masks_test, axis=0)
+    labels_test = tf.constant(df_test['encoded_answer'].values)
 
 logits_test = model(input_ids_test, attention_mask=attention_masks_test).logits
 preds_test = tf.argmax(logits_test, axis=1, output_type=tf.int32)
