@@ -1,4 +1,4 @@
-# Import necessary libraries
+# import data 
 import tensorflow as tf
 from transformers import TFRobertaForSequenceClassification, RobertaTokenizer
 import pandas as pd
@@ -6,11 +6,10 @@ import csv
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-# Function to filter valid rows
+# Load valid data set
 def filter_valid_rows(row):
     return len(row) == 2 and row[0].strip() != "" and row[1].strip() != ""
 
-# Load and filter data
 with open('rf1.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file, delimiter='|')
     filtered_rows = [row for row in reader if filter_valid_rows(row)]
@@ -18,16 +17,15 @@ with open('rf1.csv', 'r', encoding='utf-8') as file:
 df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
 print(f"Number of valid rows: {len(df)}")
 
-# Encode labels to numeric values
+# Encode labels (answers) to numeric values
 label_encoder = LabelEncoder()
 df['encoded_answer'] = label_encoder.fit_transform(df['answer'])
 
-# Initialize the tokenizer
+# Prepare the data set
 tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
 input_ids = []
 attention_masks = []
 
-# Tokenize the questions
 for question in df['question']:
     encoded = tokenizer.encode_plus(
         question,
@@ -45,7 +43,7 @@ input_ids = tf.concat(input_ids, axis=0)
 attention_masks = tf.concat(attention_masks, axis=0)
 labels = tf.constant(df['encoded_answer'].values)
 
-# Split the dataset
+# Split the data set into training, validation, and test sets
 train_inputs_idx, temp_inputs_idx, train_masks_idx, temp_masks_idx, train_labels_idx, temp_labels_idx = train_test_split(
     range(len(input_ids)), range(len(attention_masks)), range(len(labels)), test_size=0.3, random_state=42
 )
@@ -65,15 +63,15 @@ train_labels = tf.gather(labels, train_labels_idx)
 val_labels = tf.gather(labels, val_labels_idx)
 test_labels = tf.gather(labels, test_labels_idx)
 
-# Create TensorFlow datasets
+#Convert TO tf.data.Dataset
 train_dataset = tf.data.Dataset.from_tensor_slices(((train_inputs, train_masks), train_labels)).shuffle(len(train_labels)).batch(16)
 val_dataset = tf.data.Dataset.from_tensor_slices(((val_inputs, val_masks), val_labels)).batch(16)
 test_dataset = tf.data.Dataset.from_tensor_slices(((test_inputs, test_masks), test_labels)).batch(16)
 
-# Load the model
+# load model
 model = TFRobertaForSequenceClassification.from_pretrained('roberta-base', num_labels=len(label_encoder.classes_))
 
-# Custom training step
+# custom train stepp 
 @tf.function
 def train_step(model, optimizer, loss_fn, accuracy_metric, x, y):
     with tf.GradientTape() as tape:
@@ -92,12 +90,12 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5, epsilon=1e-8)
 loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 accuracy_metric = tf.keras.metrics.Accuracy()
 
-# Training loop with validation
+# Loop pelatihan dengan Validasi
 epochs = 500
 for epoch in range(epochs):
     print(f"Epoch {epoch + 1}/{epochs}")
     accuracy_metric.reset_states()
-    # Training phase
+    # training
     for step, (x_batch_train, y_batch_train) in enumerate(train_dataset):
         loss = train_step(model, optimizer, loss_fn, accuracy_metric, x_batch_train, y_batch_train)
         if step % 50 == 0:
@@ -105,7 +103,7 @@ for epoch in range(epochs):
     train_accuracy = accuracy_metric.result()
     print(f"Training accuracy after epoch {epoch + 1}: {train_accuracy:.4f}")
     
-    # Validation phase
+    # validasi
     val_loss = 0
     accuracy_metric.reset_states()
     for x_batch_val, y_batch_val in val_dataset:
@@ -120,6 +118,6 @@ for epoch in range(epochs):
     print(f"Validation loss after epoch {epoch + 1}: {val_loss:.4f}")
     print(f"Validation accuracy after epoch {epoch + 1}: {val_accuracy:.4f}")
 
-# Save the model and tokenizer
-model.save_pretrained('saved_roberta_model')
-tokenizer.save_pretrained('saved_roberta_model')
+#simpan model
+model.save_pretrained('roberta_model')
+tokenizer.save_pretrained('roberta_model')
