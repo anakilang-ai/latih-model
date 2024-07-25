@@ -4,24 +4,20 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import csv
 
-# Load tokenizer and model
-tokenizer = RobertaTokenizer.from_pretrained('roberta-base')  # Use 'roberta-base' or the appropriate model path
-model = TFRobertaForSequenceClassification.from_pretrained('roberta-base')  # Use 'roberta-base' or the appropriate model path
+# Load tokenizer &  model
+tokenizer = RobertaTokenizer.from_pretrained('roberta_model')
+model = TFRobertaForSequenceClassification.from_pretrained('roberta_model')
 
-# Load and prepare label encoder
-def load_label_encoder(csv_file):
-    with open(csv_file, 'r', encoding='utf-8') as file:
-        reader = csv.reader(file, delimiter='|')
-        filtered_rows = [row for row in reader if len(row) == 2 and row[0].strip() != "" and row[1].strip() != ""]
+# Load Encoder label
+with open('rf1.csv', 'r', encoding='utf-8') as file:
+    reader = csv.reader(file, delimiter='|')
+    filtered_rows = [row for row in reader if len(row) == 2 and row[0].strip() != "" and row[1].strip() != ""]
 
-    df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
-    label_encoder = LabelEncoder()
-    label_encoder.fit(df['answer'])
-    return label_encoder
+df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
+label_encoder = LabelEncoder()
+label_encoder.fit(df['answer'])
 
-label_encoder = load_label_encoder('rf1.csv')
-
-# Function to make predictions
+# function to make pedictions 
 def predict(question):
     encoded = tokenizer.encode_plus(
         question,
@@ -42,55 +38,47 @@ def predict(question):
     
     return predicted_label
 
-# Calculate accuracy on the test set
-def evaluate_model(csv_file):
-    test_accuracy_metric = tf.keras.metrics.Accuracy()
+# Hitung akurasi Pada Set Tes
+test_accuracy_metric = tf.keras.metrics.Accuracy()
 
-    with open(csv_file, 'r', encoding='utf-8') as file:
-        reader = csv.reader(file, delimiter='|')
-        filtered_rows = [row for row in reader if len(row) == 2 and row[0].strip() != "" and row[1].strip() != ""]
+# test model
+with open('rf1.csv', 'r', encoding='utf-8') as file:
+    reader = csv.reader(file, delimiter='|')
+    filtered_rows = [row for row in reader if len(row) == 2 and row[0].strip() != "" and row[1].strip() != ""]
 
-    df_test = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
-    df_test['encoded_answer'] = label_encoder.transform(df_test['answer'])
+df_test = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
+df_test['encoded_answer'] = label_encoder.transform(df_test['answer'])
 
-    input_ids_test = []
-    attention_masks_test = []
-    for question in df_test['question']:
-        encoded = tokenizer.encode_plus(
-            question,
-            add_special_tokens=True,
-            max_length=128,
-            padding='max_length',
-            truncation=True,
-            return_attention_mask=True,
-            return_tensors='tf'
-        )
-        input_ids_test.append(encoded['input_ids'])
-        attention_masks_test.append(encoded['attention_mask'])
+input_ids_test = []
+attention_masks_test = []
+for question in df_test['question']:
+    encoded = tokenizer.encode_plus(
+        question,
+        add_special_tokens=True,
+        max_length=128,
+        padding='max_length',
+        truncation=True,
+        return_attention_mask=True,
+        return_tensors='tf'
+    )
+    input_ids_test.append(encoded['input_ids'])
+    attention_masks_test.append(encoded['attention_mask'])
 
-    input_ids_test = tf.concat(input_ids_test, axis=0)
-    attention_masks_test = tf.concat(attention_masks_test, axis=0)
-    labels_test = tf.constant(df_test['encoded_answer'].values)
+input_ids_test = tf.concat(input_ids_test, axis=0)
+attention_masks_test = tf.concat(attention_masks_test, axis=0)
+labels_test = tf.constant(df_test['encoded_answer'].values)
 
-    logits_test = model(input_ids_test, attention_mask=attention_masks_test).logits
-    preds_test = tf.argmax(logits_test, axis=1, output_type=tf.int32)
-    test_accuracy_metric.update_state(labels_test, preds_test)
+logits_test = model(input_ids_test, attention_mask=attention_masks_test).logits
+preds_test = tf.argmax(logits_test, axis=1, output_type=tf.int32)
+test_accuracy_metric.update_state(labels_test, preds_test)
 
-    test_accuracy = test_accuracy_metric.result().numpy()
-    print(f"Test accuracy: {test_accuracy:.4f}")
+test_accuracy = test_accuracy_metric.result()
+print(f"Test accuracy: {test_accuracy:.4f}")
 
-# Run evaluation
-evaluate_model('rf1.csv')
-
-# Interactive loop for user input and predictions
-def interactive_chat():
-    while True:
-        question = input("Enter a question (or 'exit' to quit): ")
-        if question.lower() == 'exit':
-            print("Exiting the chat. Goodbye!")
-            break
-        answer = predict(question)
-        print(f"Predicted Answer: {answer}")
-
-# Start interactive chat
-interactive_chat()
+# Loop interaktif untuk input & prediksi pengguna
+while True:
+    question = input("Enter a question (or 'exit' to quit): ")
+    if question.lower() == 'exit':
+        break
+    answer = predict(question)
+    print(f"Predicted Answer: {answer}")
