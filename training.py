@@ -1,11 +1,11 @@
-# import
+# Import necessary libraries
 import torch
-from transformers import RobertaTokenizerS RobertaForSequenceClassification
+from transformers import RobertaTokenizer, RobertaForSequenceClassification
 
-# Loading model and tokenizer from 'model' Folders
-model_save_path = "./model"
-tokenizer = RobertaTokenizer.from_pretrained(model_save_path)
-model = RobertaForSequenceClassification.from_pretrained(model_save_path)
+# Define the path to the saved model and tokenizer
+model_directory = "./model"
+tokenizer = RobertaTokenizer.from_pretrained(model_directory)
+model = RobertaForSequenceClassification.from_pretrained(model_directory)
 
 #Contoh teks yang akan diklasifikasikan
 text = "Saya sangat senang dengan layanan yang ada saat ini! "
