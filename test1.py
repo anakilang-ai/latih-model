@@ -88,9 +88,22 @@ print(f"Test accuracy: {test_accuracy:.4f}")
 
 # Interactive loop for user input and predictions
 print("Interactive prediction loop. Type 'exit' to quit.")
+
 while True:
-    question = input("Enter a question (or 'exit' to quit): ")
-    if question.lower() == 'exit':
-        break
-    answer = predict(question)
-    print(f"Predicted Answer: {answer}")
+    try:
+        # Get user input
+        question = input("Enter a question (or type 'exit' to quit): ")
+        
+        # Exit condition
+        if question.lower() == 'exit':
+            print("Exiting the prediction loop. Goodbye!")
+            break
+        
+        # Make prediction
+        answer = predict(question)
+        
+        # Display the prediction result
+        print(f"Predicted Answer: {answer}")
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
