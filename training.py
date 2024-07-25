@@ -15,13 +15,15 @@ tokens = tokenizer(sample_text, return_tensors="pt", truncation=True, padding=Tr
 
 # Perform prediction
 with torch.no_grad():
-    outputs = model(**inputs)
-    logits = outputs.logits
+    predictions = model(**tokens)
+    logits = predictions.logits
 
-#prediksi label (0/1)
-predicted_class = torch.argmax(logits, dim=1).item()
+# Determine the predicted class (0/1)
+predicted_label = torch.argmax(logits, dim=1).item()
 
-#Menampilkan Hasil
-label_map = {0: "Negatif", 1: "Positif"}
-print(f"Teks: {text}")
-print(f"Prediksi Sentimen: {label_map[predicted_class]}")
+# Define the label mapping
+label_mapping = {0: "Negatif", 1: "Positif"}
+
+# Display the results
+print(f"Teks: {sample_text}")
+print(f"Prediksi Sentimen: {label_mapping[predicted_label]}")
