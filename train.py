@@ -1,18 +1,19 @@
 import pandas as pd
 import csv
-from transformers import RobertaTokenizer, RobertaForSequenceClassification, Trainer, TrainingArguments, DataCollatorWithPadding
+from transformers import RobertaTokenizer, RobertaForSequenceClassification, Trainer, TrainingArguments, DataCollatorWithPadding, set_seed
 from sklearn.model_selection import train_test_split
 from datasets import Dataset
 import torch
 
-# load dataset train
-df = pd.read_csv('lar-clean.csv', delimiter='|', names=['question', 'answer'], encoding='utf-8', quoting=csv.QUOTE_NONE)
+# Set random seed for reproducibility
+set_seed(42)
 
-# Buat label biner (0 atau 1) dari data jawaban jika perlu
-df['label'] = df.index % 2  # For example, using indexes as temporary labels
-
-# Pisahkan data menjadi pelatihan dan pengujian
-train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+# Function to load and prepare data
+def load_and_prepare_data(file_path, delimiter='|'):
+    df = pd.read_csv(file_path, delimiter=delimiter, names=['question', 'answer'], encoding='utf-8', quoting=csv.QUOTE_NONE)
+    df['label'] = df.index % 2  # Using indexes as temporary labels for binary classification
+    train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+    return train_df, test_df
 
 # create hugging face dataset
 train_dataset = Dataset.from_pandas(train_df)
