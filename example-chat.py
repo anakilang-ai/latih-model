@@ -1,6 +1,6 @@
 import random
 
-# Daftar jawaban acak
+# List of random answers
 random_answers = [
     "Saya baik-baik saja, terima kasih!",
     "Hari saya sangat menyenangkan!",
@@ -18,17 +18,17 @@ def main():
     print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
     
     while True:
-        # Minta pengguna untuk memasukkan pertanyaan
+        # Ask the user for input
         user_question = input("Anda: ")
         
-        # Periksa apakah pengguna ingin keluar
+        # Check if the user wants to exit
         if user_question.lower() == 'keluar':
             print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
             break
         
-        # Pilih jawaban acak
+        # Select a random response
         response = random.choice(random_answers)
         print("Bot: " + response)
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     main()
