@@ -35,12 +35,30 @@ def preprocess_function(examples):
     inputs['labels'] = examples['label']
     return inputs
 
-#Dataset token
-train_dataset = train_dataset.map(preprocess_function, batched=True)
-test_dataset = test_dataset.map(preprocess_function, batched=True)
+# Preprocess the datasets with the tokenizer
+def preprocess_function(examples):
+    # Tokenize the input data
+    inputs = tokenizer(
+        text=examples['question'],
+        text_pair=examples['answer'],
+        truncation=True,
+        padding='max_length',
+        max_length=512,
+        return_tensors='pt'
+    )
+    inputs['labels'] = examples['label']
+    return inputs
 
-# make Data collator
+# Apply preprocessing to the datasets
+print("Preprocessing the datasets...")
+train_dataset = train_dataset.map(preprocess_function, batched=True, remove_columns=['question', 'answer'])
+test_dataset = test_dataset.map(preprocess_function, batched=True, remove_columns=['question', 'answer'])
+
+# Create a Data Collator with Padding
 data_collator = DataCollatorWithPadding(tokenizer)
+
+print("Data preparation complete.")
+
 
 # add The training argument
 training_args = TrainingArguments(
