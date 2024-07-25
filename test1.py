@@ -42,16 +42,11 @@ def predict(question):
     
     return predicted_label
 
-# Hitung akurasi Pada Set Tes
-test_accuracy_metric = tf.keras.metrics.Accuracy()
-
-# test model
-with open('rf1.csv', 'r', encoding='utf-8') as file:
-    reader = csv.reader(file, delimiter='|')
-    filtered_rows = [row for row in reader if len(row) == 2 and row[0].strip() != "" and row[1].strip() != ""]
-
-df_test = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
-df_test['encoded_answer'] = label_encoder.transform(df_test['answer'])
+# Calculate accuracy on test set
+def calculate_test_accuracy(file_path):
+    test_accuracy_metric = tf.keras.metrics.Accuracy()
+    df_test = load_and_process_csv(file_path)
+    df_test['encoded_answer'] = label_encoder.transform(df_test['answer'])
 
 input_ids_test = []
 attention_masks_test = []
