@@ -35,30 +35,12 @@ def preprocess_function(examples):
     inputs['labels'] = examples['label']
     return inputs
 
-# Preprocess the datasets with the tokenizer
-def preprocess_function(examples):
-    # Tokenize the input data
-    inputs = tokenizer(
-        text=examples['question'],
-        text_pair=examples['answer'],
-        truncation=True,
-        padding='max_length',
-        max_length=512,
-        return_tensors='pt'
-    )
-    inputs['labels'] = examples['label']
-    return inputs
+#Dataset token
+train_dataset = train_dataset.map(preprocess_function, batched=True)
+test_dataset = test_dataset.map(preprocess_function, batched=True)
 
-# Apply preprocessing to the datasets
-print("Preprocessing the datasets...")
-train_dataset = train_dataset.map(preprocess_function, batched=True, remove_columns=['question', 'answer'])
-test_dataset = test_dataset.map(preprocess_function, batched=True, remove_columns=['question', 'answer'])
-
-# Create a Data Collator with Padding
+# make Data collator
 data_collator = DataCollatorWithPadding(tokenizer)
-
-print("Data preparation complete.")
-
 
 # add The training argument
 training_args = TrainingArguments(
@@ -81,66 +63,37 @@ trainer = Trainer(
     data_collator=data_collator,
 )
 
-# Train the model
-print("Starting training...")
+# make Training the model
 trainer.train()
 
-# Save the model and tokenizer
-print("Saving model and tokenizer...")
-model_save_path = "./model"
-tokenizer_save_path = "./model"
+#Saves the model & tokenizer
+model.save_pretrained("./model")
+tokenizer.save_pretrained("./model")
 
-# Save the model
-model.save_pretrained(model_save_path)
-print(f"Model saved to {model_save_path}")
-
-# Save the tokenizer
-tokenizer.save_pretrained(tokenizer_save_path)
-print(f"Tokenizer saved to {tokenizer_save_path}")
-
-
-# Example of use for predictions with pre-trained models
+#Example of use for predictions with pre trained models
 def predict(question, answer):
-    # Tokenize inputs and prepare tensors for the model
     inputs = tokenizer(
-        text=[question],  # Use text parameter for single strings
-        text_pair=[answer],  # Pair question and answer
+        question,
+        answer,
         truncation=True,
         padding='max_length',
         max_length=512,
         return_tensors="pt"
     )
-    
-    # Ensure the model is in evaluation mode
-    model.eval()
 
-    # Perform prediction without tracking gradients
     with torch.no_grad():
         outputs = model(**inputs)
-    
-    # Extract logits and determine the predicted class
+
     logits = outputs.logits
     predicted_class = torch.argmax(logits, dim=1).item()
-    
+
     return predicted_class
 
-
-# Example using predictions
+#Example using predictions
 question = "cara minta transkrip nilai"
-answer = ("Yth. Kepala Bagian Akademik Universitas XYZ di Tempat. "
-          "Dengan hormat, Mahasiswa Universitas XYZ, Nama saya [Nama], "
-          "dengan NIM [NIM]. Saya ingin meminta transkrip nilai semester [semester] "
-          "yang telah saya tempuh. Demikian surat permohonan ini saya sampaikan, "
-          "atas perhatian dan kerjasamanya saya ucapkan terima kasih. "
-          "Hormat saya [Nama]")
+answer = "Yth. Kepala Bagian Akademik Universitas XYZdi TempatDengan hormat,Mahasiswa Universitas XYZ, Nama saya [Nama], dengan NIM [NIM]. Saya ingin meminta transkrip nilai semester [semester] yang telah saya tempuh.Demikian surat permohonan ini saya sampaikan, atas perhatian dan kerjasamanya saya ucapkan terima kasih.Hormat saya [Nama]"
 
-# Make predictions
 predicted_class = predict(question, answer)
-
-# Mapping of class labels to human-readable names (if needed)
-label_names = {0: "Class 0", 1: "Class 1"}  # Update with actual class names if available
-
-# Output results
 print(f"Pertanyaan: {question}")
 print(f"Jawaban: {answer}")
-print(f"Kelas Prediksi: {label_names.get(predicted_class, 'Unknown')}")
+print(f"Kelas Prediksi: {predicted_class}")
