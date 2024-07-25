@@ -48,18 +48,13 @@ def calculate_test_accuracy(file_path):
     df_test = load_and_process_csv(file_path)
     df_test['encoded_answer'] = label_encoder.transform(df_test['answer'])
 
-input_ids_test = []
-attention_masks_test = []
-for question in df_test['question']:
-    encoded = tokenizer.encode_plus(
-        question,
-        add_special_tokens=True,
-        max_length=128,
-        padding='max_length',
-        truncation=True,
-        return_attention_mask=True,
-        return_tensors='tf'
-    )
+    input_ids_test = []
+    attention_masks_test = []
+    for question in df_test['question']:
+        input_ids, attention_mask = encode_question(question)
+        input_ids_test.append(input_ids)
+        attention_masks_test.append(attention_mask)
+
     input_ids_test.append(encoded['input_ids'])
     attention_masks_test.append(encoded['attention_mask'])
 
