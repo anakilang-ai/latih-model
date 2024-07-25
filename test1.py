@@ -66,13 +66,16 @@ def calculate_test_accuracy(file_path):
     test_accuracy = test_accuracy_metric.result().numpy()
     return test_accuracy
 
-test_accuracy = test_accuracy_metric.result()
+test_accuracy = calculate_test_accuracy('rf1.csv')
 print(f"Test accuracy: {test_accuracy:.4f}")
 
-# Loop interaktif untuk input & prediksi pengguna
-while True:
-    question = input("Enter a question (or 'exit' to quit): ")
-    if question.lower() == 'exit':
-        break
-    answer = predict(question)
-    print(f"Predicted Answer: {answer}")
+# Interactive loop for user input and prediction
+def interactive_prediction():
+    while True:
+        question = input("Enter a question (or 'exit' to quit): ")
+        if question.lower() == 'exit':
+            break
+        answer = predict(question)
+        print(f"Predicted Answer: {answer}")
+
+interactive_prediction()
