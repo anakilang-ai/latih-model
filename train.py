@@ -89,11 +89,22 @@ def predict(question, answer):
 
     return predicted_class
 
-#Example using predictions
+# Example using predictions
 question = "cara minta transkrip nilai"
-answer = "Yth. Kepala Bagian Akademik Universitas XYZdi TempatDengan hormat,Mahasiswa Universitas XYZ, Nama saya [Nama], dengan NIM [NIM]. Saya ingin meminta transkrip nilai semester [semester] yang telah saya tempuh.Demikian surat permohonan ini saya sampaikan, atas perhatian dan kerjasamanya saya ucapkan terima kasih.Hormat saya [Nama]"
+answer = ("Yth. Kepala Bagian Akademik Universitas XYZ di Tempat. "
+          "Dengan hormat, Mahasiswa Universitas XYZ, Nama saya [Nama], "
+          "dengan NIM [NIM]. Saya ingin meminta transkrip nilai semester [semester] "
+          "yang telah saya tempuh. Demikian surat permohonan ini saya sampaikan, "
+          "atas perhatian dan kerjasamanya saya ucapkan terima kasih. "
+          "Hormat saya [Nama]")
 
+# Make predictions
 predicted_class = predict(question, answer)
+
+# Mapping of class labels to human-readable names (if needed)
+label_names = {0: "Class 0", 1: "Class 1"}  # Update with actual class names if available
+
+# Output results
 print(f"Pertanyaan: {question}")
 print(f"Jawaban: {answer}")
-print(f"Kelas Prediksi: {predicted_class}")
+print(f"Kelas Prediksi: {label_names.get(predicted_class, 'Unknown')}")
