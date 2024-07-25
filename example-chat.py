@@ -1,16 +1,16 @@
 import random
 
 # Daftar jawaban acak
-random_answers = [
+responses = [
     "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "Saya baru saja menonton film yang bagus.",
-    "Saya suka pizza, itu makanan favorit saya.",
-    "Saya hobi bermain gitar.",
-    "Akhir pekan ini saya berencana pergi hiking.",
-    "Ya, saya suka bermain game, terutama game strategi.",
+    "Hari ini sangat menyenangkan!",
+    "Saya baru saja selesai menonton film yang menarik.",
+    "Saya sangat suka pizza, itu adalah makanan favorit saya.",
+    "Saya memiliki hobi bermain gitar.",
+    "Akhir pekan ini saya berencana untuk hiking.",
+    "Ya, saya suka bermain game, terutama yang bergenre strategi.",
     "Belum, saya belum makan siang.",
-    "Saya suka bermain sepak bola.",
+    "Saya menikmati bermain sepak bola.",
     "Buku favorit saya adalah 'Harry Potter'."
 ]
 
