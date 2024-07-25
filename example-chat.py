@@ -1,34 +1,34 @@
 import random
 
 # Daftar jawaban acak
-responses = [
+random_answers = [
     "Saya baik-baik saja, terima kasih!",
-    "Hari ini sangat menyenangkan!",
-    "Saya baru saja selesai menonton film yang menarik.",
-    "Saya sangat suka pizza, itu adalah makanan favorit saya.",
-    "Saya memiliki hobi bermain gitar.",
-    "Akhir pekan ini saya berencana untuk hiking.",
-    "Ya, saya suka bermain game, terutama yang bergenre strategi.",
+    "Hari saya sangat menyenangkan!",
+    "Saya baru saja menonton film yang bagus.",
+    "Saya suka pizza, itu makanan favorit saya.",
+    "Saya hobi bermain gitar.",
+    "Akhir pekan ini saya berencana pergi hiking.",
+    "Ya, saya suka bermain game, terutama game strategi.",
     "Belum, saya belum makan siang.",
-    "Saya menikmati bermain sepak bola.",
+    "Saya suka bermain sepak bola.",
     "Buku favorit saya adalah 'Harry Potter'."
 ]
 
-def chat_bot():
-    print("Selamat datang di Obrolan Bot! Ketik 'keluar' untuk mengakhiri percakapan.")
+def main():
+    print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
     
     while True:
-        # Input pertanyaan dari pengguna
-        user_input = input("Anda: ")
+        # Minta pengguna untuk memasukkan pertanyaan
+        user_question = input("Anda: ")
         
-        # Cek jika pengguna ingin keluar
-        if user_input.strip().lower() == 'keluar':
-            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa lagi!")
+        # Periksa apakah pengguna ingin keluar
+        if user_question.lower() == 'keluar':
+            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
             break
         
-        # Pilih jawaban secara acak
-        bot_response = random.choice(responses)
-        print("Bot: " + bot_response)
+        # Pilih jawaban acak
+        response = random.choice(random_answers)
+        print("Bot: " + response)
 
-if __name__ == "__main__":
-    chat_bot()
+if name == "main":
+    main()
