@@ -14,15 +14,15 @@ responses = [
     "Buku favorit saya adalah 'Harry Potter'."
 ]
 
-def main():
-    print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
+def chat_bot():
+    print("Selamat datang di Obrolan Bot! Ketik 'keluar' untuk mengakhiri percakapan.")
     
     while True:
-        # Minta pengguna untuk memasukkan pertanyaan
-        user_question = input("Anda: ")
+        # Input pertanyaan dari pengguna
+        user_input = input("Anda: ")
         
-        # Periksa apakah pengguna ingin keluar
-        if user_question.lower() == 'keluar':
+        # Cek jika pengguna ingin keluar
+        if user_input.strip().lower() == 'keluar':
             print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
             break
         
