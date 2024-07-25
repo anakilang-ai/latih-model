@@ -23,12 +23,12 @@ def chat_bot():
         
         # Cek jika pengguna ingin keluar
         if user_input.strip().lower() == 'keluar':
-            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
+            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa lagi!")
             break
         
-        # Pilih jawaban acak
-        response = random.choice(random_answers)
-        print("Bot: " + response)
+        # Pilih jawaban secara acak
+        bot_response = random.choice(responses)
+        print("Bot: " + bot_response)
 
-if name == "main":
-    main()
+if __name__ == "__main__":
+    chat_bot()
