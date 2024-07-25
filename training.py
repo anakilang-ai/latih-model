@@ -7,13 +7,13 @@ model_directory = "./model"
 tokenizer = RobertaTokenizer.from_pretrained(model_directory)
 model = RobertaForSequenceClassification.from_pretrained(model_directory)
 
-#Contoh teks yang akan diklasifikasikan
-text = "Saya sangat senang dengan layanan yang ada saat ini! "
+# Example text for classification
+sample_text = "Saya sangat senang dengan layanan yang ada saat ini!"
 
-#Tokenisasi Teks
-inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
+# Tokenize the input text
+tokens = tokenizer(sample_text, return_tensors="pt", truncation=True, padding=True)
 
-#Membuat prediksi
+# Perform prediction
 with torch.no_grad():
     outputs = model(**inputs)
     logits = outputs.logits
