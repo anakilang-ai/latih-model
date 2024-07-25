@@ -40,12 +40,17 @@ def predict(question):
     attention_mask = encoded['attention_mask']
 
     # Perform prediction
-    logits = model(input_ids, attention_mask=attention_mask).logits
-    predicted_label_id = tf.argmax(logits, axis=1).numpy()[0]
-    predicted_label = label_encoder.inverse_transform([predicted_label_id])[0]
+    try:
+        logits = model(input_ids, attention_mask=attention_mask).logits
+        # Get predicted label ID
+        predicted_label_id = tf.argmax(logits, axis=1).numpy()[0]
+        # Decode label ID to original label
+        predicted_label = label_encoder.inverse_transform([predicted_label_id])[0]
+    except Exception as e:
+        print(f"An error occurred during prediction: {e}")
+        return None
     
     return predicted_label
-
 # Evaluate accuracy on test set
 print("Evaluating model accuracy on test set...")
 test_accuracy_metric = tf.keras.metrics.Accuracy()
