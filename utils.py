@@ -42,12 +42,14 @@ class BartGenerator:
         # Use the generation configuration directly from the model config
         outputs = self.model.generate(
             inputs['input_ids'],
-            max_length=max_length,
-            num_beams=self.generation_config.num_beams,
-            no_repeat_ngram_size=self.generation_config.no_repeat_ngram_size,
-            decoder_start_token_id=self.generation_config.decoder_start_token_id,
-            bos_token_id=self.generation_config.bos_token_id,
-            eos_token_id=self.generation_config.eos_token_id
+            early_stopping=True,
+            num_beams=5, 
+            no_repeat_ngram_size=0,
+            forced_bos_token_id=0,
+            forced_eos_token_id=2,
+            max_length=160,  
+            bos_token_id=0,
+            decoder_start_token_id=2
         )
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
