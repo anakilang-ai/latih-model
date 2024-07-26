@@ -6,7 +6,7 @@ import torch
 import evaluate
 from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig
 from sklearn.model_selection import train_test_split as tts
-from utils import QADataset, logging_config, BartGenerator
+from utils import QADataset, logging_config
 
 # Logging configuration
 logging_config('log_model', 'training.log')
@@ -56,8 +56,10 @@ data_collator = DataCollatorForSeq2Seq(
     model=model,
 )
 
-epoch = 20  # Increased the number of epochs for better training
+# epoch size and batchsize levels
+epoch = 20
 batch_size = 10
+
 # Define training arguments
 training_args = TrainingArguments(
     output_dir=f'./result/results_coba{num}-{epoch}-{batch_size}',
