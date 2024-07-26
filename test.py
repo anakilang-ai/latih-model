@@ -1,5 +1,5 @@
 import logging
-from utils import logging_config, BartGenerator
+from utils import logging_config, BartGenerator, generate_answer
 from trainprocess import path
 
 
@@ -16,7 +16,7 @@ def main():
             break
 
         try:
-            answer = generator.generate_answer(question, max_length=100)
+            answer = generator.generate_answer(question)
             print(f"Jawaban: {answer}")
 
             # Log the result
