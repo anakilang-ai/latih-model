@@ -6,7 +6,7 @@ from trainprocess import path
 logging_config('log_model', 'generator_test.log')
 
 def main():
-    generator = BartGenerator(model_path='model/bart_coba{num}-{epoch}-{batch_size}')
+    generator = BartGenerator(path)
 
     while True:
         question = input("Masukkan pertanyaan (atau ketik 'exit' untuk keluar): ").strip()
