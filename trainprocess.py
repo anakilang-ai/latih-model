@@ -43,21 +43,21 @@ train_answers = train_data['answer'].tolist()
 test_questions = test_data['question'].tolist()
 test_answers = test_data['answer'].tolist()
 
-dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=160)
-dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=160)
+train_dataset = QADataset(train_questions, train_answers, tokenizer, max_length=160)
+test_dataset = QADataset(test_questions, test_answers, tokenizer, max_length=160)
 
-# Load model
+# Load the BART model
 model = BartForConditionalGeneration.from_pretrained(model_name)
 
-# Define data collator
-data_collator = DataCollatorForSeq2Seq(
+# Data collator setup
+collator = DataCollatorForSeq2Seq(
     tokenizer=tokenizer,
     model=model,
 )
 
-# epoch size and batchsize levels
-epoch = 20
-batch_size = 10
+# Training parameters
+num_epochs = 20
+train_batch_size = 10
 
 # Define training arguments
 training_args = TrainingArguments(
