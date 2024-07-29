@@ -14,21 +14,21 @@ responses = [
     "My favorite book is 'Harry Potter'."
 ]
 
-def main():
-    print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
+def chat_game():
+    print("Welcome to the Chat Game! Type 'exit' to end the chat.")
     
     while True:
-        # Minta pengguna untuk memasukkan pertanyaan
-        user_question = input("Anda: ")
+        # Ask the user for input
+        user_input = input("You: ")
         
-        # Periksa apakah pengguna ingin keluar
-        if user_question.lower() == 'keluar':
-            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
+        # Check if the user wants to exit
+        if user_input.lower() == 'exit':
+            print("Bot: Thanks for chatting! See you later!")
             break
         
-        # Pilih jawaban acak
-        response = random.choice(random_answers)
-        print("Bot: " + response)
+        # Select a random response
+        bot_response = random.choice(responses)
+        print("Bot: " + bot_response)
 
-if name == "main":
-    main()
+if __name__ == "__main__":
+    chat_game()
