@@ -59,11 +59,11 @@ collator = DataCollatorForSeq2Seq(
 num_epochs = 20
 train_batch_size = 10
 
-# Define training arguments
-training_args = TrainingArguments(
-    output_dir=f'./result/results_coba{num}-{epoch}-{batch_size}',
-    num_train_epochs=epoch,
-    per_device_train_batch_size=batch_size,
+# Training configuration
+training_params = TrainingArguments(
+    output_dir=f'./result/results_coba{file_prefix}-{num_epochs}-{train_batch_size}',
+    num_train_epochs=num_epochs,
+    per_device_train_batch_size=train_batch_size,
     per_device_eval_batch_size=4,
     learning_rate=5e-5,
     warmup_steps=160,
@@ -76,38 +76,38 @@ training_args = TrainingArguments(
     evaluation_strategy="epoch",
 )
 
-# Define generation config
-generation_config = GenerationConfig(
+# Generation configuration
+gen_config = GenerationConfig(
     early_stopping=True,
-    num_beams=5, 
+    num_beams=5,
     no_repeat_ngram_size=0,
     forced_bos_token_id=0,
     forced_eos_token_id=2,
-    max_length=160,  
+    max_length=160,
     bos_token_id=0,
     decoder_start_token_id=2
 )
 
-# Load metrics
-bleu_metric = evaluate.load("bleu")
+# Load evaluation metric
+bleu = evaluate.load("bleu")
 
-def compute_metrics(eval_pred):
+def calculate_metrics(eval_pred):
     logits, labels = eval_pred
     if isinstance(logits, tuple):
         logits = logits[0]
 
-    # Convert logits to a tensor
+    # Convert logits to tensor
     logits = torch.tensor(logits)
-    predictions = torch.argmax(logits, dim=-1)
+    preds = torch.argmax(logits, dim=-1)
     
-    decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+    decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
     decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
     
-    # BLEU score
-    bleu = bleu_metric.compute(predictions=decoded_preds, references=[[label] for label in decoded_labels])
+    # Compute BLEU score
+    bleu_score = bleu.compute(predictions=decoded_preds, references=[[label] for label in decoded_labels])
 
     return {
-        "bleu": bleu["bleu"],
+        "bleu": bleu_score["bleu"],
     }
 
 # Trainer
