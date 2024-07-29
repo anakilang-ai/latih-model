@@ -14,16 +14,16 @@ def run():
             print("Exiting the program...")
             break
         try:
-            answer = generator.generate_answer(question)
-            print(f"Jawaban: {answer}")
+            response = answer_generator.get_answer(query)
+            print(f"Answer: {response}")
 
-            # Log the result
-            logging.info(f"Model: {generator.model_path}")
-            logging.info(f"Pertanyaan: {question}")
-            logging.info(f"Jawaban: {answer}")
+            # Log the details
+            logging.info(f"Model Path: {answer_generator.model_path}")
+            logging.info(f"Question: {query}")
+            logging.info(f"Answer: {response}")
             logging.info("------------------------------------------\n")
-        except ValueError as e:
-            print(e)
+        except ValueError as error:
+            print(error)
 
-if _name_ == "_main_":
-    main()
+if __name__ == "__main__":
+    run()
