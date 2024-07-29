@@ -77,17 +77,20 @@ training_args = TrainingArguments(
     evaluation_strategy="epoch",
 )
 
+from transformers import GenerationConfig
+
 # Mendefinisikan konfigurasi generasi
 generation_config = GenerationConfig(
-    early_stopping=True,
-    num_beams=5,
-    no_repeat_ngram_size=0,
-    forced_bos_token_id=0,
-    forced_eos_token_id=2,
-    max_length=160,
-    bos_token_id=0,
-    decoder_start_token_id=2
+    early_stopping=True,               # Menghentikan generasi teks lebih awal jika kondisi tertentu terpenuhi
+    num_beams=5,                       # Menggunakan beam search dengan 5 beam untuk menghasilkan teks
+    no_repeat_ngram_size=0,            # Mengizinkan pengulangan n-gram
+    forced_bos_token_id=0,             # Menggunakan token ID 0 sebagai token awal dari sequence
+    forced_eos_token_id=2,             # Menggunakan token ID 2 sebagai token akhir dari sequence
+    max_length=160,                    # Panjang maksimum dari sequence yang dihasilkan
+    bos_token_id=0,                    # Token ID untuk token awal dari sequence
+    decoder_start_token_id=2           # Token ID untuk token awal dari decoder
 )
+
 
 # Memuat metrik BLEU
 bleu_metric = evaluate.load("bleu")
