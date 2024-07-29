@@ -44,11 +44,11 @@ class BartGenerator:
             early_stopping=True,
             num_beams=5, 
             no_repeat_ngram_size=0,
-            forced_bos_token_id=0,
-            forced_eos_token_id=2,
+            forced_bos_token_id=self.generation_config.bos_token_id,
+            forced_eos_token_id=self.tokenizer.eos_token_id,
             max_length=max_length,  
-            bos_token_id=0,
-            decoder_start_token_id=2
+            bos_token_id=self.generation_config.bos_token_id,
+            decoder_start_token_id=self.generation_config.decoder_start_token_id
         )
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
@@ -67,12 +67,12 @@ class QADataset(Dataset):
         input_encoding = self.tokenizer(self.inputs[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
         target_encoding = self.tokenizer(self.targets[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
         
-        input_ids = input_encoding.input_ids.squeeze().numpy()
-        attention_mask = input_encoding.attention_mask.squeeze().numpy()
-        labels = target_encoding.input_ids.squeeze().numpy()
+        input_ids = input_encoding.input_ids.squeeze()
+        attention_mask = input_encoding.attention_mask.squeeze()
+        labels = target_encoding.input_ids.squeeze()
 
         return {
-            "input_ids": torch.tensor(input_ids, dtype=torch.long),
-            "attention_mask": torch.tensor(attention_mask, dtype=torch.long),
-            "labels": torch.tensor(labels, dtype=torch.long)
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "labels": labels
         }
