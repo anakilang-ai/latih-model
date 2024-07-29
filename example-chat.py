@@ -1,34 +1,34 @@
 import random
 
-# List of random responses
-responses = [
-    "I'm doing well, thank you!",
-    "My day has been fantastic!",
-    "I just watched a great movie.",
-    "I love pizza, it's my favorite food.",
-    "I enjoy playing the guitar.",
-    "This weekend I plan to go hiking.",
-    "Yes, I like playing games, especially strategy games.",
-    "No, I haven't had lunch yet.",
-    "I like playing soccer.",
-    "My favorite book is 'Harry Potter'."
+# Daftar jawaban acak
+random_answers = [
+    "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "Saya baru saja menonton film yang bagus.",
+    "Saya suka pizza, itu makanan favorit saya.",
+    "Saya hobi bermain gitar.",
+    "Akhir pekan ini saya berencana pergi hiking.",
+    "Ya, saya suka bermain game, terutama game strategi.",
+    "Belum, saya belum makan siang.",
+    "Saya suka bermain sepak bola.",
+    "Buku favorit saya adalah 'Harry Potter'."
 ]
 
-def chat_game():
-    print("Welcome to the Chat Game! Type 'exit' to end the chat.")
+def main():
+    print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
     
     while True:
-        # Ask the user for input
-        user_input = input("You: ")
+        # Minta pengguna untuk memasukkan pertanyaan
+        user_question = input("Anda: ")
         
-        # Check if the user wants to exit
-        if user_input.lower() == 'exit':
-            print("Bot: Thanks for chatting! See you later!")
+        # Periksa apakah pengguna ingin keluar
+        if user_question.lower() == 'keluar':
+            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
             break
         
-        # Select a random response
-        bot_response = random.choice(responses)
-        print("Bot: " + bot_response)
+        # Pilih jawaban acak
+        response = random.choice(random_answers)
+        print("Bot: " + response)
 
-if __name__ == "__main__":
-    chat_game()
+if name == "main":
+    main()
