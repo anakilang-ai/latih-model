@@ -8,22 +8,22 @@ from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, T
 from sklearn.model_selection import train_test_split as tts
 from utils import QADataset, logging_config
 
-# Logging configuration
+# Set up logging
 logging_config('log_model', 'training.log')
 
-# Function to filter valid rows
-def filter_valid_rows(row):
+# Function to validate rows
+def is_valid_row(row):
     return len(row) == 2 and all(row)
 
-# Load the dataset
-num = 'dataset-kelas'
-filtered_rows = []
-with open(f'{num}.csv', 'r', encoding='utf-8') as file:
-    reader = csv.reader(file, delimiter='|', quoting=csv.QUOTE_NONE)
-    for row in reader:
-        if filter_valid_rows(row):
-            filtered_rows.append(row)
-
+# Load dataset
+file_prefix = 'dataset-kelas'
+valid_rows = []
+with open(f'{file_prefix}.csv', 'r', encoding='utf-8') as csvfile:
+    csv_reader = csv.reader(csvfile, delimiter='|', quoting=csv.QUOTE_NONE)
+    for row in csv_reader:
+        if is_valid_row(row):
+            valid_rows.append(row)
+            
 df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
 
 # Split dataset into training and test sets
