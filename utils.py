@@ -3,7 +3,6 @@ import os
 import torch
 from torch.utils.data import Dataset
 from transformers import BartTokenizer, BartForConditionalGeneration, GenerationConfig
-import numpy as np
 
 # Logging configuration
 def logging_config(log_dir, log_filename):
@@ -47,7 +46,7 @@ class BartGenerator:
             no_repeat_ngram_size=0,
             forced_bos_token_id=0,
             forced_eos_token_id=2,
-            max_length=160,  
+            max_length=max_length,  
             bos_token_id=0,
             decoder_start_token_id=2
         )
