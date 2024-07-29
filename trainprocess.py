@@ -110,30 +110,30 @@ def calculate_metrics(eval_pred):
         "bleu": bleu_score["bleu"],
     }
 
-# Trainer
+# Trainer setup
 trainer = Trainer(
     model=model,
-    args=training_args,
-    train_dataset=dataset_train,
-    eval_dataset=dataset_test,
-    data_collator=data_collator,
-    compute_metrics=compute_metrics
+    args=training_params,
+    train_dataset=train_dataset,
+    eval_dataset=test_dataset,
+    data_collator=collator,
+    compute_metrics=calculate_metrics
 )
 
-# Train the model
+# Start training
 trainer.train()
 
-# Save the model
-path = f'model/bart_coba{num}-{epoch}-{batch_size}'
-model.save_pretrained(path)
-tokenizer.save_pretrained(path)
-generation_config.save_pretrained(path)
+# Save model and tokenizer
+model_dir = f'model/bart_coba{file_prefix}-{num_epochs}-{train_batch_size}'
+model.save_pretrained(model_dir)
+tokenizer.save_pretrained(model_dir)
+gen_config.save_pretrained(model_dir)
 
-# Evaluate model
-eval_results = trainer.evaluate()
+# Evaluate the model
+evaluation_results = trainer.evaluate()
 
-# Print evaluation results, including accuracy
-print(f"Evaluation results: {eval_results}")
-logging.info(f"Model: {path}")
-logging.info(f"Evaluation results: {eval_results}")
+# Log evaluation results
+print(f"Evaluation results: {evaluation_results}")
+logging.info(f"Model: {model_dir}")
+logging.info(f"Evaluation results: {evaluation_results}")
 logging.info("------------------------------------------\n")
