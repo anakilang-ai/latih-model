@@ -23,26 +23,25 @@ with open(f'{file_prefix}.csv', 'r', encoding='utf-8') as csvfile:
     for row in csv_reader:
         if is_valid_row(row):
             valid_rows.append(row)
-            
-df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
 
-# Split dataset into training and test sets
-train_df, test_df = tts(df, test_size=0.2, random_state=42)
+data = pd.DataFrame(valid_rows, columns=['question', 'answer'])
 
-# Reset index to ensure continuous indexing
-train_df = train_df.reset_index(drop=True)
-test_df = test_df.reset_index(drop=True)
+# Split data into training and testing sets
+train_data, test_data = tts(data, test_size=0.2, random_state=42)
 
-# Prepare the dataset
+# Reset index for consistent indexing
+train_data = train_data.reset_index(drop=True)
+test_data = test_data.reset_index(drop=True)
+
+# Prepare tokenizer and dataset
 model_name = 'facebook/bart-base'
 tokenizer = BartTokenizer.from_pretrained(model_name)
 
-# Combine question and answer into a single string for training
-inputs_train = train_df['question'].tolist()
-targets_train = train_df['answer'].tolist()
+train_questions = train_data['question'].tolist()
+train_answers = train_data['answer'].tolist()
 
-inputs_test = test_df['question'].tolist()
-targets_test = test_df['answer'].tolist()
+test_questions = test_data['question'].tolist()
+test_answers = test_data['answer'].tolist()
 
 dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=160)
 dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=160)
