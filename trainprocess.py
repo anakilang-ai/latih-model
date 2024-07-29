@@ -13,7 +13,7 @@ logging_config('log_model', 'training.log')
 
 # Fungsi untuk memfilter baris yang valid
 def filter_valid_rows(row):
-    return len(row) == 2 dan all(row)
+    return len(row) == 2 and all(row)
 
 # Memuat dataset
 num = 'dataset-kelas'
@@ -26,10 +26,10 @@ with open(f'{num}.csv', 'r', encoding='utf-8') as file:
 
 df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
 
-# Membagi dataset menjadi set pelatihan dan set pengujian
+# Membagi dataset menjadi set pelatihan dan pengujian
 train_df, test_df = tts(df, test_size=0.2, random_state=42)
 
-# Reset index untuk memastikan indeks berkelanjutan
+# Mereset index agar berkelanjutan
 train_df = train_df.reset_index(drop=True)
 test_df = test_df.reset_index(drop=True)
 
@@ -56,7 +56,7 @@ data_collator = DataCollatorForSeq2Seq(
     model=model,
 )
 
-# Jumlah epoch dan ukuran batch
+# Ukuran epoch dan batch size
 epoch = 20
 batch_size = 10
 
@@ -80,16 +80,16 @@ training_args = TrainingArguments(
 # Mendefinisikan konfigurasi generasi
 generation_config = GenerationConfig(
     early_stopping=True,
-    num_beams=5, 
+    num_beams=5,
     no_repeat_ngram_size=0,
     forced_bos_token_id=0,
     forced_eos_token_id=2,
-    max_length=160,  
+    max_length=160,
     bos_token_id=0,
     decoder_start_token_id=2
 )
 
-# Memuat metrik
+# Memuat metrik BLEU
 bleu_metric = evaluate.load("bleu")
 
 def compute_metrics(eval_pred):
@@ -133,7 +133,7 @@ generation_config.save_pretrained(path)
 # Mengevaluasi model
 eval_results = trainer.evaluate()
 
-# Menampilkan hasil evaluasi, termasuk akurasi
+# Mencetak hasil evaluasi
 print(f"Hasil evaluasi: {eval_results}")
 logging.info(f"Model: {path}")
 logging.info(f"Hasil evaluasi: {eval_results}")
