@@ -100,12 +100,29 @@ def compute_metrics(eval_pred):
     if isinstance(logits, tuple):
         logits = logits[0]
 
-    # Mengonversi logits menjadi tensor
-    logits = torch.tensor(logits)
-    predictions = torch.argmax(logits, dim=-1)
-    
-    decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
-    decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+   import torch
+
+# Pastikan logits dan labels adalah tensor
+logits = torch.tensor(logits) if not isinstance(logits, torch.Tensor) else logits
+labels = torch.tensor(labels) if not isinstance(labels, torch.Tensor) else labels
+
+# Mendapatkan prediksi dengan mengambil argmax dari logits sepanjang dimensi terakhir
+predictions = torch.argmax(logits, dim=-1)
+
+# Konversi predictions dan labels menjadi list of list
+predictions_list = predictions.tolist()
+labels_list = labels.tolist()
+
+# Mendekode prediksi menjadi teks menggunakan tokenizer
+decoded_preds = tokenizer.batch_decode(predictions_list, skip_special_tokens=True)
+
+# Mendekode label menjadi teks menggunakan tokenizer
+decoded_labels = tokenizer.batch_decode(labels_list, skip_special_tokens=True)
+
+# Print untuk memastikan tidak ada error
+print("Predictions:", decoded_preds)
+print("Labels:", decoded_labels)
+
     
     # Skor BLEU
     bleu = bleu_metric.compute(predictions=decoded_preds, references=[[label] for label in decoded_labels])
