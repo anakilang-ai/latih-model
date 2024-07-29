@@ -1,29 +1,31 @@
 import logging
-from utils import setup_logging, BartAnswerGenerator, get_answer
-from trainprocess import model_path
+from utils import logging_config, BartGenerator, generate_answer
+from trainprocess import path
 
-setup_logging('log_model', 'generator_test.log')
 
-def run():
-    answer_generator = BartAnswerGenerator(model_path)
+logging_config('log_model', 'generator_test.log')
+
+def main():
+    generator = BartGenerator(path)
 
     while True:
-        query = input("Enter your question (or type 'exit' to quit): ").strip()
+        question = input("Masukkan pertanyaan (atau ketik 'exit' untuk keluar): ").strip()
 
-        if query.lower() == 'exit':
-            print("Exiting the program...")
+        if question.lower() == 'exit':
+            print("Terminating the program...")
             break
+
         try:
-            response = answer_generator.get_answer(query)
-            print(f"Answer: {response}")
+            answer = generator.generate_answer(question)
+            print(f"Jawaban: {answer}")
 
-            # Log the details
-            logging.info(f"Model Path: {answer_generator.model_path}")
-            logging.info(f"Question: {query}")
-            logging.info(f"Answer: {response}")
+            # Log the result
+            logging.info(f"Model: {generator.model_path}")
+            logging.info(f"Pertanyaan: {question}")
+            logging.info(f"Jawaban: {answer}")
             logging.info("------------------------------------------\n")
-        except ValueError as error:
-            print(error)
+        except ValueError as e:
+            print(e)
 
-if __name__ == "__main__":
-    run()
+if _name_ == "_main_":
+    main()
