@@ -8,6 +8,9 @@ random_answers = [
     "Hari saya sangat menyenangkan!",
     "abccsadwadwa",
     "Hari saya sangat menyenangkan!"
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!"
 ]
 
 def main():
