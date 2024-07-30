@@ -3,9 +3,9 @@ import random
 # Daftar jawaban acak
 random_answers = [
     "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!"
+    "Hari saya sangat menyenangkan!",
     "dawdawdawd!",
-    "Hari saya sangat menyenangkan!"
+    "Hari saya sangat menyenangkan!",
     "abccsadwadwa",
     "Hari saya sangat menyenangkan!"
 ]
