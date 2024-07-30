@@ -10,6 +10,14 @@ random_answers = [
     "Hari saya sangat menyenangkan!",
         "Hari saya sangat menyenangkan!",
     "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
     "Hari saya sangat menyenangkan!"
 ]
 
