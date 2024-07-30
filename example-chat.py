@@ -7,7 +7,17 @@ random_answers = [
     "dawdawdawd!",
     "Hari saya sangat menyenangkan!",
     "abccsadwadwa",
-    "Hari saya sangat menyenangkan!"
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
         "Hari saya sangat menyenangkan!",
     "abccsadwadwa",
     "Hari saya sangat menyenangkan!"
@@ -15,6 +25,7 @@ random_answers = [
 
 def main():
     print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
+    print("kiww")
     
     while True:
         # Minta pengguna untuk memasukkan pertanyaan
