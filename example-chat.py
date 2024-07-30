@@ -4,6 +4,10 @@ import random
 random_answers = [
     "Saya baik-baik saja, terima kasih!",
     "Hari saya sangat menyenangkan!"
+    "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!"
+    "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!"
 ]
 
 def main():
