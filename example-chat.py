@@ -3,15 +3,7 @@ import random
 # Daftar jawaban acak
 random_answers = [
     "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "Saya baru saja menonton film yang bagus.",
-    "Saya suka pizza, itu makanan favorit saya.",
-    "Saya hobi bermain gitar.",
-    "Akhir pekan ini saya berencana pergi hiking.",
-    "Ya, saya suka bermain game, terutama game strategi.",
-    "Belum, saya belum makan siang.",
-    "Saya suka bermain sepak bola.",
-    "Buku favorit saya adalah 'Harry Potter'."
+    "Hari saya sangat menyenangkan!"
 ]
 
 def main():
