@@ -4,9 +4,9 @@ import random
 random_answers = [
     "Saya baik-baik saja, terima kasih!",
     "Hari saya sangat menyenangkan!"
-    "Saya baik-baik saja, terima kasih!",
+    "dawdawdawd!",
     "Hari saya sangat menyenangkan!"
-    "Saya baik-baik saja, terima kasih!",
+    "abccsadwadwa",
     "Hari saya sangat menyenangkan!"
 ]
 
