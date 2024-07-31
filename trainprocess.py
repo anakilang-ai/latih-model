@@ -5,7 +5,7 @@ import csv
 import torch
 import evaluate
 import os
-from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig
+from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig, AdamW, get_linear_schedule_with_warmup, EarlyStoppingCallback
 from sklearn.model_selection import train_test_split as tts
 from utils import QADataset, logging_config
 
@@ -76,6 +76,8 @@ training_args = TrainingArguments(
     save_total_limit=5,  # Menyimpan lebih banyak checkpoint
     fp16=True,
     evaluation_strategy="epoch",
+    gradient_accumulation_steps=2,  # Mengakumulasikan gradien selama 2 step untuk mensimulasikan batch size yang lebih besar
+    dataloader_num_workers=4,  # Memanfaatkan lebih banyak CPU untuk loading data
 )
 
 # Define generation config
@@ -88,6 +90,14 @@ generation_config = GenerationConfig(
     max_length=256,  
     bos_token_id=0,
     decoder_start_token_id=2
+)
+
+# Define optimizer and scheduler
+optimizer = AdamW(model.parameters(), lr=5e-5)
+scheduler = get_linear_schedule_with_warmup(
+    optimizer, 
+    num_warmup_steps=160, 
+    num_training_steps=len(dataset_train) * epoch // batch_size
 )
 
 # Load metrics
@@ -119,7 +129,9 @@ trainer = Trainer(
     train_dataset=dataset_train,
     eval_dataset=dataset_test,
     data_collator=data_collator,
-    compute_metrics=compute_metrics
+    compute_metrics=compute_metrics,
+    optimizers=(optimizer, scheduler),
+    callbacks=[EarlyStoppingCallback(early_stopping_patience=3)],  # Early stopping
 )
 
 # Train the model
