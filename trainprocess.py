@@ -5,9 +5,8 @@ import csv
 import torch
 import evaluate
 import os
-from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig, AdamW, get_linear_schedule_with_warmup, EarlyStoppingCallback
+from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig
 from sklearn.model_selection import train_test_split as tts
-from textaugment import EDA
 from utils import QADataset, logging_config
 
 # Logging configuration
@@ -46,20 +45,8 @@ targets_train = train_df['answer'].tolist()
 inputs_test = test_df['question'].tolist()
 targets_test = test_df['answer'].tolist()
 
-# Data augmentation
-augmenter = EDA()
-augmented_data = []
-for question, answer in zip(inputs_train, targets_train):
-    augmented_question = augmenter.synonym_replacement(question)
-    augmented_answer = augmenter.synonym_replacement(answer)
-    augmented_data.append((augmented_question, augmented_answer))
-
-inputs_train_augmented, targets_train_augmented = zip(*augmented_data)
-inputs_train += list(inputs_train_augmented)
-targets_train += list(targets_train_augmented)
-
-dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=256)
-dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=256)
+dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=160)
+dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=160)
 
 # Load model
 model = BartForConditionalGeneration.from_pretrained(model_name)
@@ -71,8 +58,8 @@ data_collator = DataCollatorForSeq2Seq(
 )
 
 # epoch size and batchsize levels
-epoch = 10  # Mengurangi jumlah epoch untuk eksperimen awal
-batch_size = 8  # Menyesuaikan batch size untuk menghindari out of memory
+epoch = 20
+batch_size = 10
 
 # Define training arguments
 training_args = TrainingArguments(
@@ -85,13 +72,10 @@ training_args = TrainingArguments(
     weight_decay=0.01,
     logging_dir='./logs',
     logging_steps=10,
-    save_steps=200,  # Menyimpan checkpoint lebih sering
-    save_total_limit=5,  # Menyimpan lebih banyak checkpoint
+    save_steps=160,
+    save_total_limit=2,
     fp16=True,
-    evaluation_strategy="steps",  # Lakukan evaluasi setiap beberapa langkah
-    eval_steps=200,  # Interval evaluasi
-    gradient_accumulation_steps=2,  # Mengakumulasikan gradien selama 2 step untuk mensimulasikan batch size yang lebih besar
-    dataloader_num_workers=4,  # Memanfaatkan lebih banyak CPU untuk loading data
+    evaluation_strategy="epoch",
 )
 
 # Define generation config
@@ -101,17 +85,9 @@ generation_config = GenerationConfig(
     no_repeat_ngram_size=0,
     forced_bos_token_id=0,
     forced_eos_token_id=2,
-    max_length=256,  
+    max_length=160,  
     bos_token_id=0,
     decoder_start_token_id=2
-)
-
-# Define optimizer and scheduler
-optimizer = AdamW(model.parameters(), lr=5e-5)
-scheduler = get_linear_schedule_with_warmup(
-    optimizer, 
-    num_warmup_steps=160, 
-    num_training_steps=len(dataset_train) * epoch // batch_size
 )
 
 # Load metrics
@@ -122,15 +98,16 @@ def compute_metrics(eval_pred):
     if isinstance(logits, tuple):
         logits = logits[0]
 
+    # Convert logits to a tensor
     logits = torch.tensor(logits)
     predictions = torch.argmax(logits, dim=-1)
     
     decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
     decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
     
+    # BLEU score
     bleu = bleu_metric.compute(predictions=decoded_preds, references=[[label] for label in decoded_labels])
-    logging.info(f"BLEU score: {bleu['bleu']}")
-    
+
     return {
         "bleu": bleu["bleu"],
     }
@@ -142,9 +119,7 @@ trainer = Trainer(
     train_dataset=dataset_train,
     eval_dataset=dataset_test,
     data_collator=data_collator,
-    compute_metrics=compute_metrics,
-    optimizers=(optimizer, scheduler),
-    callbacks=[EarlyStoppingCallback(early_stopping_patience=3)],  # Early stopping
+    compute_metrics=compute_metrics
 )
 
 # Train the model
