@@ -104,15 +104,25 @@ def train_model(df, model_name='facebook/bart-base', epoch=20, batch_size=10):
             "bleu": bleu["bleu"],
         }
 
-    # Trainer
-    trainer = Trainer(
-        model=model,
-        args=training_args,
-        train_dataset=dataset_train,
-        eval_dataset=dataset_test,
-        data_collator=data_collator,
-        compute_metrics=compute_metrics
-    )
+   from transformers import Trainer, TrainingArguments
+
+# Define the Trainer with additional parameters
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=dataset_train,
+    eval_dataset=dataset_test,
+    data_collator=data_collator,
+    compute_metrics=compute_metrics,
+    # Optional parameters
+    report_to="tensorboard",  # You can use "wandb" for Weights & Biases or other reporting tools
+    logging_strategy="steps",  # Can be "epoch" or "steps"
+    logging_steps=50,  # Log every 50 steps (adjust as needed)
+)
+
+print("Trainer configured with additional parameters.")
+logging.info("Trainer configured with additional parameters.")
+
 
     # Train the model
     trainer.train()
