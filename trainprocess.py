@@ -58,8 +58,8 @@ data_collator = DataCollatorForSeq2Seq(
 )
 
 # epoch size and batchsize levels
-epoch = 10  # Mengurangi jumlah epoch untuk eksperimen awal
-batch_size = 8  # Menyesuaikan batch size untuk menghindari out of memory
+epoch = 20  # Mengurangi jumlah epoch untuk eksperimen awal
+batch_size = 10  # Menyesuaikan batch size untuk menghindari out of memory
 
 # Define training arguments
 training_args = TrainingArguments(
