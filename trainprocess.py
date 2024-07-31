@@ -113,20 +113,20 @@ trainer = Trainer(
     data_collator=collator,
     compute_metrics=calculate_metrics
 )
-# Model training
+# Train the model
 trainer.train()
 
 # Save the model
-model_path = f'model/bart_{dataset_name}_{epochs}_{batch_size_train}'
-model.save_pretrained(model_path)
-tokenizer.save_pretrained(model_path)
-gen_config.save_pretrained(model_path)
+path = f'model/bart_coba{num}-{epoch}-{batch_size}'
+model.save_pretrained(path)
+tokenizer.save_pretrained(path)
+generation_config.save_pretrained(path)
 
-# Evaluate the model
-evaluation_results = trainer.evaluate()
+# Evaluate model
+eval_results = trainer.evaluate()
 
-# Log and print evaluation results
-print(f"Evaluation results: {evaluation_results}")
-logging.info(f"Model saved at: {model_path}")
-logging.info(f"Evaluation results: {evaluation_results}")
+# Print evaluation results, including accuracy
+print(f"Evaluation results: {eval_results}")
+logging.info(f"Model: {path}")
+logging.info(f"Evaluation results: {eval_results}")
 logging.info("------------------------------------------\n")
