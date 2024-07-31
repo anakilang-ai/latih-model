@@ -75,7 +75,7 @@ training_args = TrainingArguments(
     evaluation_strategy="epoch",
 )
 
-# Define generation config
+# Generation configuration
 generation_config = GenerationConfig(
     early_stopping=True,
     num_beams=5, 
@@ -87,7 +87,7 @@ generation_config = GenerationConfig(
     decoder_start_token_id=2
 )
 
-# Load metrics
+# Load the BLEU metric
 bleu_metric = evaluate.load("bleu")
 
 def compute_metrics(eval_pred):
@@ -95,21 +95,21 @@ def compute_metrics(eval_pred):
     if isinstance(logits, tuple):
         logits = logits[0]
 
-    # Convert logits to a tensor
+    # Convert logits to tensor
     logits = torch.tensor(logits)
     predictions = torch.argmax(logits, dim=-1)
     
     decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
     decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
     
-    # BLEU score
+    # Compute BLEU score
     bleu = bleu_metric.compute(predictions=decoded_preds, references=[[label] for label in decoded_labels])
 
     return {
         "bleu": bleu["bleu"],
     }
 
-# Trainer
+# Initialize the Trainer
 trainer = Trainer(
     model=model,
     args=training_args,
