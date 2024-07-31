@@ -1,2 +1,4 @@
 # latih-model
-asw
+Model Ai ChatBot
+
+Model : facebook/bart-base
