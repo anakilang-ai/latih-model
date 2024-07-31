@@ -1,50 +1,163 @@
 import random
 
-# Daftar jawaban berdasarkan kategori
-answers = {
-    "greeting": [
-        "Halo! Apa kabar?",
-        "Hai, bagaimana hari Anda?",
-        "Selamat datang! Ada yang bisa saya bantu?"
-    ],
-    "farewell": [
-        "Terima kasih telah berbicara dengan saya. Sampai jumpa!",
-        "Selamat tinggal! Semoga hari Anda menyenangkan.",
-        "Sampai jumpa lagi! Terima kasih sudah mengobrol."
-    ],
-    "default": [
-        "Maaf, saya tidak mengerti pertanyaan Anda.",
-        "Bisa jelaskan lebih lanjut?",
-        "Saya tidak yakin tentang itu. Coba tanya yang lain."
-    ]
-}
+# Daftar jawaban acak
+random_answers = [
+    "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+        "Saya baik-baik saja, terima kasih!",
+    "Hari saya sangat menyenangkan!",
+    "dawdawdawd!",
+    "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!",
+        "Hari saya sangat menyenangkan!",
+    "abccsadwadwa",
+    "Hari saya sangat menyenangkan!"
+]
 
-def chat():
+def main():
     print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
-    
-    exit_keywords = ['keluar', 'exit', 'quit', 'stop']
+    print("kiww")
     
     while True:
         # Minta pengguna untuk memasukkan pertanyaan
         user_question = input("Anda: ")
         
         # Periksa apakah pengguna ingin keluar
-        if any(keyword in user_question.lower() for keyword in exit_keywords):
-            response = random.choice(answers["farewell"])
-            print("Bot: " + response)
+        if user_question.lower() == 'keluar':
+            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
             break
         
-        # Tentukan jawaban berdasarkan pola pertanyaan
-        if 'halo' in user_question or 'hai' in user_question:
-            response = random.choice(answers["greeting"])
-        elif 'cuaca' in user_question or 'weather' in user_question:
-            response = random.choice(answers["weather"])
-        elif 'bantu' in user_question or 'help' in user_question:
-            response = random.choice(answers["help"])
-        else:
-            response = random.choice(answers["default"])
-        
+        # Pilih jawaban acak
+        response = random.choice(random_answers)
         print("Bot: " + response)
 
-if __name__ == "__main__":
-    chat()
+if name == "main":
+    main()
