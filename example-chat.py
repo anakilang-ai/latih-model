@@ -35,8 +35,12 @@ def chat():
             break
         
         # Tentukan jawaban berdasarkan pola pertanyaan
-        if 'halo' in user_question.lower() or 'hai' in user_question.lower():
+        if 'halo' in user_question or 'hai' in user_question:
             response = random.choice(answers["greeting"])
+        elif 'cuaca' in user_question or 'weather' in user_question:
+            response = random.choice(answers["weather"])
+        elif 'bantu' in user_question or 'help' in user_question:
+            response = random.choice(answers["help"])
         else:
             response = random.choice(answers["default"])
         
