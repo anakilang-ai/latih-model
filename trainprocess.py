@@ -23,16 +23,16 @@ with open(f'{dataset_name}.csv', 'r', encoding='utf-8') as file:
     for row in reader:
         if is_valid_row(row):
             valid_rows.append(row)
-df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
+df = pd.DataFrame(valid_rows, columns=['question', 'answer'])
 
-# Split dataset into training and test sets
-train_df, test_df = tts(df, test_size=0.2, random_state=42)
+# Split data into train and test sets
+train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
 
-# Reset index to ensure continuous indexing
-train_df = train_df.reset_index(drop=True)
-test_df = test_df.reset_index(drop=True)
+# Reset index for continuous indexing
+train_df.reset_index(drop=True, inplace=True)
+test_df.reset_index(drop=True, inplace=True)
 
-# Prepare the dataset
+# Prepare dataset for training
 model_name = 'facebook/bart-base'
 tokenizer = BartTokenizer.from_pretrained(model_name)
 
