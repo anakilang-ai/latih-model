@@ -69,10 +69,9 @@ def chat():
         user_question = input("Anda: ")
         
         # Periksa apakah pengguna ingin keluar
-         if user_question.lower() == 'exit':
-         print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
-         break
-
+        if user_question.lower() == 'keluar':
+            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
+            break
         
         # Pilih jawaban acak
         response = random.choice(random_answers)
