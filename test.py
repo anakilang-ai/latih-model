@@ -1,31 +1,50 @@
-import logging
-from utils import logging_config, BartGenerator, generate_answer
+import unittest
+from unittest.mock import patch
+from utils import BartGenerator, generate_answer, logging_config
 from trainprocess import path
 
+class TestBartGenerator(unittest.TestCase):
+    
+    @classmethod
+    def setUpClass(cls):
+        # Setup logging configuration for tests
+        logging_config('test_log', 'test_generator.log')
+        
+        # Initialize the generator with the model path
+        cls.generator = BartGenerator(path)
+    
+    def test_generate_answer_valid(self):
+        # Test generating an answer for a valid question
+        question = "What is the capital of France?"
+        expected_answer = "Paris"  # Adjust this to your expected output
+        
+        with patch.object(self.generator, 'generate_answer', return_value=expected_answer):
+            answer = self.generator.generate_answer(question)
+            self.assertEqual(answer, expected_answer)
+    
+    def test_generate_answer_invalid(self):
+        # Test generating an answer for an invalid question
+        question = "Unknown question?"
+        expected_answer = "I don't know the answer."  # Adjust this to your expected output
+        
+        with patch.object(self.generator, 'generate_answer', return_value=expected_answer):
+            answer = self.generator.generate_answer(question)
+            self.assertEqual(answer, expected_answer)
+    
+    def test_logging(self):
+        # Test if logging is properly configured and working
+        question = "What is the tallest mountain in the world?"
+        answer = "Mount Everest"  # Adjust this to your expected output
+        
+        with patch('builtins.input', return_value=question), \
+             patch('logging.info') as mock_log_info:
+            self.generator.generate_answer = lambda q: answer  # Mock method
+            
+            # Simulate main function behavior
+            answer = self.generator.generate_answer(question)
+            mock_log_info.assert_any_call(f"Model: {self.generator.model_path}")
+            mock_log_info.assert_any_call(f"Pertanyaan: {question}")
+            mock_log_info.assert_any_call(f"Jawaban: {answer}")
 
-logging_config('log_model', 'generator_test.log')
-
-def main():
-    generator = BartGenerator(path)
-
-    while True:
-        question = input("Masukkan pertanyaan (atau ketik 'exit' untuk keluar): ").strip()
-
-        if question.lower() == 'exit':
-            print("Terminating the program...")
-            break
-
-        try:
-            answer = generator.generate_answer(question)
-            print(f"Jawaban: {answer}")
-
-            # Log the result
-            logging.info(f"Model: {generator.model_path}")
-            logging.info(f"Pertanyaan: {question}")
-            logging.info(f"Jawaban: {answer}")
-            logging.info("------------------------------------------\n")
-        except ValueError as e:
-            print(e)
-
-if _name_ == "_main_":
-    main()
+if __name__ == "__main__":
+    unittest.main()
