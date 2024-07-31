@@ -3,69 +3,70 @@ import os
 import torch
 from torch.utils.data import Dataset
 from transformers import BartTokenizer, BartForConditionalGeneration, GenerationConfig
+import numpy as np
 
-# Setup logging configuration
-def configure_logging(directory, filename):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+# Logging configuration
+def logging_config(log_dir, log_filename):
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
 
     logging.basicConfig(
-        filename=os.path.join(directory, filename),
+        filename=f'{log_dir}/{log_filename}',
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
 
-# Bart Generator class definition
-class BartAnswerGenerator:
-    def __init__(self, model_directory):
-        self.tokenizer = BartTokenizer.from_pretrained(model_directory)
-        self.model = BartForConditionalGeneration.from_pretrained(model_directory)
-        self.model_directory = model_directory  # Save the model directory
+# Define the BartGenerator class
+class BartGenerator:
+    def _init_(self, model_path):
+        self.tokenizer = BartTokenizer.from_pretrained(model_path)
+        self.model = BartForConditionalGeneration.from_pretrained(model_path)
+        self.model_path = model_path  # Store the model path
         
-        # Initialize or load GenerationConfig
-        self.generation_config = GenerationConfig.from_pretrained(model_directory)
+        # Load or create a GenerationConfig
+        self.generation_config = GenerationConfig.from_pretrained(model_path)
         
-        # Set necessary tokens in the generation config if not already set
+        # Ensure that necessary tokens are set in the generation config
         self.generation_config.decoder_start_token_id = self.generation_config.decoder_start_token_id or self.tokenizer.bos_token_id
         self.generation_config.bos_token_id = self.generation_config.bos_token_id or self.tokenizer.bos_token_id
 
-        # Log and print token IDs
-        print(f"decoder_start_token_id: {self.generation_config.decoder_start_token_id}")
-        print(f"bos_token_id: {self.generation_config.bos_token_id}")
-        logging.info(f"decoder_start_token_id: {self.generation_config.decoder_start_token_id}")
-        logging.info(f"bos_token_id: {self.generation_config.bos_token_id}")
+        # Print statements to confirm the IDs
+        print(f"decoder_start_token_id is set to: {self.generation_config.decoder_start_token_id}")
+        print(f"bos_token_id is set to: {self.generation_config.bos_token_id}")
+        logging.info(f"decoder_start_token_id is set to: {self.generation_config.decoder_start_token_id}")
+        logging.info(f"bos_token_id is set to: {self.generation_config.bos_token_id}")
 
-    def generate_response(self, query, max_length=160):  # Set max_length
-        inputs = self.tokenizer(query, return_tensors='pt')
+    def generate_answer(self, question, max_length=160):  # Adjusted max_length
+        inputs = self.tokenizer(question, return_tensors='pt')
         
-        # Generate the response using the configured generation settings
+        # Use the generation configuration directly from the model config
         outputs = self.model.generate(
             inputs['input_ids'],
             early_stopping=True,
-            num_beams=5,
+            num_beams=5, 
             no_repeat_ngram_size=0,
             forced_bos_token_id=0,
             forced_eos_token_id=2,
-            max_length=max_length,  
+            max_length=160,  
             bos_token_id=0,
             decoder_start_token_id=2
         )
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-# Question-Answer Dataset class definition
-class QuestionAnswerDataset(Dataset):
-    def __init__(self, input_texts, target_texts, tokenizer, max_length=160):  # Set max_length
-        self.input_texts = input_texts
-        self.target_texts = target_texts
+# Define the QADataset class
+class QADataset(Dataset):
+    def _init_(self, inputs, targets, tokenizer, max_length=160):  # Adjusted max_length
+        self.inputs = inputs
+        self.targets = targets
         self.tokenizer = tokenizer
         self.max_length = max_length
 
-    def __len__(self):
-        return len(self.input_texts)
+    def _len_(self):
+        return len(self.inputs)
 
-    def __getitem__(self, index):
-        input_encoding = self.tokenizer(self.input_texts[index], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
-        target_encoding = self.tokenizer(self.target_texts[index], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
+    def _getitem_(self, idx):
+        input_encoding = self.tokenizer(self.inputs[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
+        target_encoding = self.tokenizer(self.targets[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
         
         input_ids = input_encoding.input_ids.squeeze().numpy()
         attention_mask = input_encoding.attention_mask.squeeze().numpy()
