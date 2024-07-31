@@ -72,47 +72,50 @@ train_args = TrainingArguments(
     evaluation_strategy="epoch",
 )
 
-# Generation configuration
-gen_config = GenerationConfig(
+# Define generation config
+generation_config = GenerationConfig(
     early_stopping=True,
-    num_beams=5,
+    num_beams=5, 
     no_repeat_ngram_size=0,
     forced_bos_token_id=0,
     forced_eos_token_id=2,
-    max_length=160,
+    max_length=160,  
     bos_token_id=0,
     decoder_start_token_id=2
 )
 
-# Metrics
-bleu = evaluate.load("bleu")
+# Load metrics
+bleu_metric = evaluate.load("bleu")
 
-def calculate_metrics(eval_pred):
-    predictions, references = eval_pred
-    if isinstance(predictions, tuple):
-        predictions = predictions[0]
+def compute_metrics(eval_pred):
+    logits, labels = eval_pred
+    if isinstance(logits, tuple):
+        logits = logits[0]
 
-    # Convert predictions to tensor
-    predictions = torch.tensor(predictions)
-    predicted_ids = torch.argmax(predictions, dim=-1)
+    # Convert logits to a tensor
+    logits = torch.tensor(logits)
+    predictions = torch.argmax(logits, dim=-1)
     
-    decoded_preds = tokenizer.batch_decode(predicted_ids, skip_special_tokens=True)
-    decoded_refs = tokenizer.batch_decode(references, skip_special_tokens=True)
+    decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+    decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
     
     # BLEU score
-    bleu_score = bleu.compute(predictions=decoded_preds, references=[[ref] for ref in decoded_refs])
+    bleu = bleu_metric.compute(predictions=decoded_preds, references=[[label] for label in decoded_labels])
 
-    return {"bleu": bleu_score["bleu"]}
+    return {
+        "bleu": bleu["bleu"],
+    }
 
-# Trainer setup
+# Trainer
 trainer = Trainer(
     model=model,
-    args=train_args,
-    train_dataset=train_dataset,
-    eval_dataset=test_dataset,
-    data_collator=collator,
-    compute_metrics=calculate_metrics
+    args=training_args,
+    train_dataset=dataset_train,
+    eval_dataset=dataset_test,
+    data_collator=data_collator,
+    compute_metrics=compute_metrics
 )
+
 # Train the model
 trainer.train()
 
