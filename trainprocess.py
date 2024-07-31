@@ -5,25 +5,24 @@ import csv
 import torch
 import evaluate
 from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig
-from sklearn.model_selection import train_test_split as tts
+from sklearn.model_selection import train_test_split
 from utils import QADataset, logging_config
 
-# Logging configuration
+# Setup logging
 logging_config('log_model', 'training.log')
 
-# Function to filter valid rows
-def filter_valid_rows(row):
+# Function to check if rows are valid
+def is_valid_row(row):
     return len(row) == 2 and all(row)
 
-# Load the dataset
-num = 'dataset-kelas'
-filtered_rows = []
-with open(f'{num}.csv', 'r', encoding='utf-8') as file:
+# Read and filter dataset
+dataset_name = 'dataset-kelas'
+valid_rows = []
+with open(f'{dataset_name}.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file, delimiter='|', quoting=csv.QUOTE_NONE)
     for row in reader:
-        if filter_valid_rows(row):
-            filtered_rows.append(row)
-
+        if is_valid_row(row):
+            valid_rows.append(row)
 df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
 
 # Split dataset into training and test sets
