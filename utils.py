@@ -3,15 +3,14 @@ import os
 import torch
 from torch.utils.data import Dataset
 from transformers import BartTokenizer, BartForConditionalGeneration, GenerationConfig
-import numpy as np
 
-# Logging configuration
-def logging_config(log_dir, log_filename):
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
+# Setup logging configuration
+def configure_logging(directory, filename):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
     logging.basicConfig(
-        filename=f'{log_dir}/{log_filename}',
+        filename=os.path.join(directory, filename),
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
