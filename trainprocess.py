@@ -36,7 +36,6 @@ test_df.reset_index(drop=True, inplace=True)
 model_name = 'facebook/bart-base'
 tokenizer = BartTokenizer.from_pretrained(model_name)
 
-# Combine question and answer into a single string for training
 inputs_train = train_df['question'].tolist()
 targets_train = train_df['answer'].tolist()
 
@@ -46,7 +45,7 @@ targets_test = test_df['answer'].tolist()
 dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=160)
 dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=160)
 
-# Load model
+# Load the model
 model = BartForConditionalGeneration.from_pretrained(model_name)
 
 # Define data collator
@@ -55,14 +54,14 @@ data_collator = DataCollatorForSeq2Seq(
     model=model,
 )
 
-# epoch size and batchsize levels
-epoch = 20
+# Set epoch and batch size
+epochs = 20
 batch_size = 10
 
-# Define training arguments
+# Training arguments
 training_args = TrainingArguments(
-    output_dir=f'./result/results_coba{num}-{epoch}-{batch_size}',
-    num_train_epochs=epoch,
+    output_dir=f'./result/results_{dataset_name}_{epochs}_{batch_size}',
+    num_train_epochs=epochs,
     per_device_train_batch_size=batch_size,
     per_device_eval_batch_size=4,
     learning_rate=5e-5,
