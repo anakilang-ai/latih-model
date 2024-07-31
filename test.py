@@ -19,12 +19,12 @@ def main():
             print(f"Jawaban: {answer}")
 
             # Log the result
-            logging.info(f"Model Path: {generator.model_path}")
+            logging.info(f"Model: {generator.model_path}")
             logging.info(f"Pertanyaan: {question}")
             logging.info(f"Jawaban: {answer}")
-            logging.info("------------------------------------------")
-        except ValueError as error:
-            print(error)
+            logging.info("------------------------------------------\n")
+        except ValueError as e:
+            print(e)
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
