@@ -1,163 +1,29 @@
 import random
 
-# Daftar jawaban acak
-random_answers = [
+# List of random responses
+responses = [
     "Saya baik-baik saja, terima kasih!",
     "Hari saya sangat menyenangkan!",
     "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-        "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-        "Hari saya sangat menyenangkan!",
     "abccsadwadwa",
     "Hari saya sangat menyenangkan!"
-]
+] * 20  # Repeat to maintain similar length
 
-def main():
-    print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
-    print("kiww")
+def chat():
+    print("Selamat datang di Chat Bot! Ketik 'exit' untuk mengakhiri obrolan.")
     
     while True:
-        # Minta pengguna untuk memasukkan pertanyaan
-        user_question = input("Anda: ")
+        # Get user input
+        user_input = input("Kamu: ")
         
-        # Periksa apakah pengguna ingin keluar
-        if user_question.lower() == 'keluar':
-            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
+        # Check if the user wants to exit
+        if user_input.lower() == 'exit':
+            print("Bot: Terima kasih sudah berbicara! Sampai jumpa!")
             break
         
-        # Pilih jawaban acak
-        response = random.choice(random_answers)
-        print("Bot: " + response)
+        # Select a random response
+        bot_response = random.choice(responses)
+        print("Bot: " + bot_response)
 
-if name == "main":
-    main()
+if __name__ == "__main__":
+    chat()
