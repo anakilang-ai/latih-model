@@ -5,48 +5,50 @@ import csv
 import torch
 import evaluate
 from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig
-from sklearn.model_selection import train_test_split
-from utils import QADataset, setup_logging
+from sklearn.model_selection import train_test_split as tts
+from utils import QADataset, logging_config
 
-# Logging setup
-setup_logging('log_model', 'training.log')
+# Logging configuration
+logging_config('log_model', 'training.log')
 
-# Function to validate rows
-def is_valid_row(row):
+# Function to filter valid rows
+def filter_valid_rows(row):
     return len(row) == 2 and all(row)
 
-# Load dataset
-dataset_name = 'dataset-kelas'
-valid_rows = []
-with open(f'{dataset_name}.csv', 'r', encoding='utf-8') as csvfile:
-    csvreader = csv.reader(csvfile, delimiter='|', quoting=csv.QUOTE_NONE)
-    for row in csvreader:
-        if is_valid_row(row):
-            valid_rows.append(row)
+# Load the dataset
+num = 'dataset-kelas'
+filtered_rows = []
+with open(f'{num}.csv', 'r', encoding='utf-8') as file:
+    reader = csv.reader(file, delimiter='|', quoting=csv.QUOTE_NONE)
+    for row in reader:
+        if filter_valid_rows(row):
+            filtered_rows.append(row)
 
-data = pd.DataFrame(valid_rows, columns=['question', 'answer'])
+df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
 
-# Split the dataset
-train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
+# Split dataset into training and test sets
+train_df, test_df = tts(df, test_size=0.2, random_state=42)
 
-# Reset index
-train_data.reset_index(drop=True, inplace=True)
-test_data.reset_index(drop=True, inplace=True)
+# Reset index to ensure continuous indexing
+train_df = train_df.reset_index(drop=True)
+test_df = test_df.reset_index(drop=True)
 
-# Prepare the tokenizer and datasets
-model_identifier = 'facebook/bart-base'
-tokenizer = BartTokenizer.from_pretrained(model_identifier)
+# Prepare the dataset
+model_name = 'facebook/bart-base'
+tokenizer = BartTokenizer.from_pretrained(model_name)
 
-train_inputs = train_data['question'].tolist()
-train_targets = train_data['answer'].tolist()
-test_inputs = test_data['question'].tolist()
-test_targets = test_data['answer'].tolist()
+# Combine question and answer into a single string for training
+inputs_train = train_df['question'].tolist()
+targets_train = train_df['answer'].tolist()
 
-train_dataset = QADataset(train_inputs, train_targets, tokenizer, max_length=160)
-test_dataset = QADataset(test_inputs, test_targets, tokenizer, max_length=160)
+inputs_test = test_df['question'].tolist()
+targets_test = test_df['answer'].tolist()
 
-# Load the model
-model = BartForConditionalGeneration.from_pretrained(model_identifier)
+dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=160)
+dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=160)
+
+# Load model
+model = BartForConditionalGeneration.from_pretrained(model_name)
 
 # Define data collator
 data_collator = DataCollatorForSeq2Seq(
