@@ -36,10 +36,10 @@ class BartGenerator:
         logging.info(f"decoder_start_token_id: {self.generation_config.decoder_start_token_id}")
         logging.info(f"bos_token_id: {self.generation_config.bos_token_id}")
 
-    def generate_answer(self, question, max_length=160):  # Adjusted max_length
-        inputs = self.tokenizer(question, return_tensors='pt')
+    def generate_response(self, prompt, max_length=160):  # Adjusted max_length
+        inputs = self.tokenizer(prompt, return_tensors='pt')
         
-        # Use the generation configuration directly from the model config
+        # Generate using the configuration from the model
         outputs = self.model.generate(
             inputs['input_ids'],
             early_stopping=True,
@@ -55,13 +55,13 @@ class BartGenerator:
 
 # Define the QADataset class
 class QADataset(Dataset):
-    def _init_(self, inputs, targets, tokenizer, max_length=160):  # Adjusted max_length
+    def __init__(self, inputs, targets, tokenizer, max_length=160):  # Adjusted max_length
         self.inputs = inputs
         self.targets = targets
         self.tokenizer = tokenizer
         self.max_length = max_length
 
-    def _len_(self):
+    def __len__(self):
         return len(self.inputs)
 
     def _getitem_(self, idx):
