@@ -33,22 +33,20 @@ train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
 train_data.reset_index(drop=True, inplace=True)
 test_data.reset_index(drop=True, inplace=True)
 
-# Prepare the dataset
-model_name = 'facebook/bart-base'
-tokenizer = BartTokenizer.from_pretrained(model_name)
+# Prepare the tokenizer and datasets
+model_identifier = 'facebook/bart-base'
+tokenizer = BartTokenizer.from_pretrained(model_identifier)
 
-# Combine question and answer into a single string for training
-inputs_train = train_df['question'].tolist()
-targets_train = train_df['answer'].tolist()
+train_inputs = train_data['question'].tolist()
+train_targets = train_data['answer'].tolist()
+test_inputs = test_data['question'].tolist()
+test_targets = test_data['answer'].tolist()
 
-inputs_test = test_df['question'].tolist()
-targets_test = test_df['answer'].tolist()
+train_dataset = QADataset(train_inputs, train_targets, tokenizer, max_length=160)
+test_dataset = QADataset(test_inputs, test_targets, tokenizer, max_length=160)
 
-dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=160)
-dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=160)
-
-# Load model
-model = BartForConditionalGeneration.from_pretrained(model_name)
+# Load the model
+model = BartForConditionalGeneration.from_pretrained(model_identifier)
 
 # Define data collator
 data_collator = DataCollatorForSeq2Seq(
