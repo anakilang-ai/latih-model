@@ -48,21 +48,18 @@ test_dataset = QADataset(test_inputs, test_targets, tokenizer, max_length=160)
 # Load the model
 model = BartForConditionalGeneration.from_pretrained(model_identifier)
 
-# Define data collator
-data_collator = DataCollatorForSeq2Seq(
-    tokenizer=tokenizer,
-    model=model,
-)
+# Data collator
+collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model)
 
-# epoch size and batchsize levels
-epoch = 20
-batch_size = 10
+# Training parameters
+epochs = 20
+batch_size_train = 10
 
-# Define training arguments
-training_args = TrainingArguments(
-    output_dir=f'./result/results_coba{num}-{epoch}-{batch_size}',
-    num_train_epochs=epoch,
-    per_device_train_batch_size=batch_size,
+# Training arguments
+train_args = TrainingArguments(
+    output_dir=f'./results_{dataset_name}_{epochs}_{batch_size_train}',
+    num_train_epochs=epochs,
+    per_device_train_batch_size=batch_size_train,
     per_device_eval_batch_size=4,
     learning_rate=5e-5,
     warmup_steps=160,
