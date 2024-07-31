@@ -15,23 +15,23 @@ setup_logging('log_model', 'training.log')
 def is_valid_row(row):
     return len(row) == 2 and all(row)
 
-# Load the dataset
-num = 'dataset-kelas'
-filtered_rows = []
-with open(f'{num}.csv', 'r', encoding='utf-8') as file:
-    reader = csv.reader(file, delimiter='|', quoting=csv.QUOTE_NONE)
-    for row in reader:
-        if filter_valid_rows(row):
-            filtered_rows.append(row)
+# Load dataset
+dataset_name = 'dataset-kelas'
+valid_rows = []
+with open(f'{dataset_name}.csv', 'r', encoding='utf-8') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter='|', quoting=csv.QUOTE_NONE)
+    for row in csvreader:
+        if is_valid_row(row):
+            valid_rows.append(row)
 
-df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
+data = pd.DataFrame(valid_rows, columns=['question', 'answer'])
 
-# Split dataset into training and test sets
-train_df, test_df = tts(df, test_size=0.2, random_state=42)
+# Split the dataset
+train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
 
-# Reset index to ensure continuous indexing
-train_df = train_df.reset_index(drop=True)
-test_df = test_df.reset_index(drop=True)
+# Reset index
+train_data.reset_index(drop=True, inplace=True)
+test_data.reset_index(drop=True, inplace=True)
 
 # Prepare the dataset
 model_name = 'facebook/bart-base'
