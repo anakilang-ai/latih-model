@@ -1,6 +1,7 @@
 import logging
-from utils import logging_config, BartGenerator
+from utils import logging_config, BartGenerator, generate_answer
 from trainprocess import path
+
 
 logging_config('log_model', 'generator_test.log')
 
@@ -8,10 +9,10 @@ def main():
     generator = BartGenerator(path)
 
     while True:
-        question = input("Masukkan pertanyaan (atau ketik 'keluar' untuk keluar): ").strip()
+        question = input("Masukkan pertanyaan (atau ketik 'exit' untuk keluar): ").strip()
 
-        if question.lower() == 'keluar':
-            print("Menghentikan program...")
+        if question.lower() == 'exit':
+            print("Terminating the program...")
             break
 
         try:
