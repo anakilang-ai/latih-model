@@ -126,11 +126,18 @@ def train_model(df, model_name='facebook/bart-base', epoch=20, batch_size=10):
     # Evaluate model
     eval_results = trainer.evaluate()
 
-    # Print evaluation results, including accuracy
-    print(f"Evaluation results: {eval_results}")
-    logging.info(f"Model: {path}")
-    logging.info(f"Evaluation results: {eval_results}")
-    logging.info("------------------------------------------\n")
+    # Print evaluation results
+print("Evaluation Results:")
+for metric, score in eval_results.items():
+    print(f"{metric}: {score:.4f}")
+
+# Log the model path and evaluation results
+logging.info("Model Path: %s", path)
+logging.info("Evaluation Results:")
+for metric, score in eval_results.items():
+    logging.info(f"{metric}: {score:.4f}")
+logging.info("------------------------------------------\n")
+
 
 if __name__ == "__main__":
     # Load dataset and train model
