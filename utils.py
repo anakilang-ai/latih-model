@@ -18,28 +18,28 @@ def configure_logging(log_directory, log_file):
 
 # Define the BartGenerator class
 class BartGenerator:
-    def __init__(self, model_directory):
-        self.tokenizer = BartTokenizer.from_pretrained(model_directory)
-        self.model = BartForConditionalGeneration.from_pretrained(model_directory)
-        self.model_directory = model_directory  # Save the model directory
+    def _init_(self, model_path):
+        self.tokenizer = BartTokenizer.from_pretrained(model_path)
+        self.model = BartForConditionalGeneration.from_pretrained(model_path)
+        self.model_path = model_path  # Store the model path
         
-        # Load or initialize a GenerationConfig
-        self.generation_config = GenerationConfig.from_pretrained(model_directory)
+        # Load or create a GenerationConfig
+        self.generation_config = GenerationConfig.from_pretrained(model_path)
         
-        # Ensure that the necessary tokens are set in the generation configuration
+        # Ensure that necessary tokens are set in the generation config
         self.generation_config.decoder_start_token_id = self.generation_config.decoder_start_token_id or self.tokenizer.bos_token_id
         self.generation_config.bos_token_id = self.generation_config.bos_token_id or self.tokenizer.bos_token_id
 
-        # Log statements to confirm the token IDs
-        print(f"decoder_start_token_id: {self.generation_config.decoder_start_token_id}")
-        print(f"bos_token_id: {self.generation_config.bos_token_id}")
-        logging.info(f"decoder_start_token_id: {self.generation_config.decoder_start_token_id}")
-        logging.info(f"bos_token_id: {self.generation_config.bos_token_id}")
+        # Print statements to confirm the IDs
+        print(f"decoder_start_token_id is set to: {self.generation_config.decoder_start_token_id}")
+        print(f"bos_token_id is set to: {self.generation_config.bos_token_id}")
+        logging.info(f"decoder_start_token_id is set to: {self.generation_config.decoder_start_token_id}")
+        logging.info(f"bos_token_id is set to: {self.generation_config.bos_token_id}")
 
-    def generate_response(self, prompt, max_length=160):  # Adjusted max_length
-        inputs = self.tokenizer(prompt, return_tensors='pt')
+    def generate_answer(self, question, max_length=160):  # Adjusted max_length
+        inputs = self.tokenizer(question, return_tensors='pt')
         
-        # Generate using the configuration from the model
+        # Use the generation configuration directly from the model config
         outputs = self.model.generate(
             inputs['input_ids'],
             early_stopping=True,
@@ -55,16 +55,16 @@ class BartGenerator:
 
 # Define the QADataset class
 class QADataset(Dataset):
-    def __init__(self, inputs, targets, tokenizer, max_length=160):  # Adjusted max_length
+    def _init_(self, inputs, targets, tokenizer, max_length=160):  # Adjusted max_length
         self.inputs = inputs
         self.targets = targets
         self.tokenizer = tokenizer
         self.max_length = max_length
 
-    def __len__(self):
+    def _len_(self):
         return len(self.inputs)
 
-    def __getitem__(self, idx):
+    def _getitem_(self, idx):
         input_encoding = self.tokenizer(self.inputs[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
         target_encoding = self.tokenizer(self.targets[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
         
