@@ -35,18 +35,18 @@ class BartAnswerGenerator:
         logging.info(f"decoder_start_token_id: {self.generation_config.decoder_start_token_id}")
         logging.info(f"bos_token_id: {self.generation_config.bos_token_id}")
 
-    def generate_answer(self, question, max_length=160):  # Adjusted max_length
-        inputs = self.tokenizer(question, return_tensors='pt')
+    def generate_response(self, query, max_length=160):  # Set max_length
+        inputs = self.tokenizer(query, return_tensors='pt')
         
-        # Use the generation configuration directly from the model config
+        # Generate the response using the configured generation settings
         outputs = self.model.generate(
             inputs['input_ids'],
             early_stopping=True,
-            num_beams=5, 
+            num_beams=5,
             no_repeat_ngram_size=0,
             forced_bos_token_id=0,
             forced_eos_token_id=2,
-            max_length=160,  
+            max_length=max_length,  
             bos_token_id=0,
             decoder_start_token_id=2
         )
