@@ -46,32 +46,6 @@ random_answers = [
     "dawdawdawd!",
     "Hari saya sangat menyenangkan!",
     "abccsadwadwa",
-    "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Hari saya sangat menyenangkan!",
-    "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
-    "Saya baik-baik saja, terima kasih!",
-    "Hari saya sangat menyenangkan!",
-    "dawdawdawd!",
-    "Hari saya sangat menyenangkan!",
-    "abccsadwadwa",
     "Hari saya sangat menyenangkan!",
     "Saya baik-baik saja, terima kasih!",
     "Hari saya sangat menyenangkan!",
@@ -87,7 +61,7 @@ random_answers = [
     "Hari saya sangat menyenangkan!",
 ]
 
-def main():
+def chat():
     print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
     
     while True:
@@ -104,4 +78,4 @@ def main():
         print("Bot: " + response)
 
 if __name__ == "__main__":
-    main()
+    chat()
