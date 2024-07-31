@@ -54,14 +54,14 @@ data_collator = DataCollatorForSeq2Seq(
     model=model,
 )
 
-# Set epoch and batch size
-epochs = 20
+# epoch size and batchsize levels
+epoch = 20
 batch_size = 10
 
-# Training arguments
+# Define training arguments
 training_args = TrainingArguments(
-    output_dir=f'./result/results_{dataset_name}_{epochs}_{batch_size}',
-    num_train_epochs=epochs,
+    output_dir=f'./result/results_coba{num}-{epoch}-{batch_size}',
+    num_train_epochs=epoch,
     per_device_train_batch_size=batch_size,
     per_device_eval_batch_size=4,
     learning_rate=5e-5,
@@ -75,7 +75,7 @@ training_args = TrainingArguments(
     evaluation_strategy="epoch",
 )
 
-# Generation configuration
+# Define generation config
 generation_config = GenerationConfig(
     early_stopping=True,
     num_beams=5, 
@@ -87,7 +87,7 @@ generation_config = GenerationConfig(
     decoder_start_token_id=2
 )
 
-# Load the BLEU metric
+# Load metrics
 bleu_metric = evaluate.load("bleu")
 
 def compute_metrics(eval_pred):
@@ -95,21 +95,21 @@ def compute_metrics(eval_pred):
     if isinstance(logits, tuple):
         logits = logits[0]
 
-    # Convert logits to tensor
+    # Convert logits to a tensor
     logits = torch.tensor(logits)
     predictions = torch.argmax(logits, dim=-1)
     
     decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
     decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
     
-    # Compute BLEU score
+    # BLEU score
     bleu = bleu_metric.compute(predictions=decoded_preds, references=[[label] for label in decoded_labels])
 
     return {
         "bleu": bleu["bleu"],
     }
 
-# Initialize the Trainer
+# Trainer
 trainer = Trainer(
     model=model,
     args=training_args,
