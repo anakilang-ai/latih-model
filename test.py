@@ -14,13 +14,19 @@ class TestBartGenerator(unittest.TestCase):
         cls.generator = BartGenerator(path)
     
     def test_generate_answer_valid(self):
-        # Test generating an answer for a valid question
-        question = "What is the capital of France?"
-        expected_answer = "Paris"  # Adjust this to your expected output
-        
+        def test_generate_answer_valid_multiple(self):
+    # Test generating answers for multiple valid questions
+    test_cases = [
+        ("What is the capital of France?", "Paris"),
+        ("Who is the president of the United States?", "Joe Biden"),
+        ("What is the chemical symbol for water?", "H2O")
+    ]
+    
+    for question, expected_answer in test_cases:
         with patch.object(self.generator, 'generate_answer', return_value=expected_answer):
             answer = self.generator.generate_answer(question)
             self.assertEqual(answer, expected_answer)
+
     
     def test_generate_answer_invalid(self):
         # Test generating an answer for an invalid question
