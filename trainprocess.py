@@ -5,37 +5,39 @@ import csv
 import torch
 import evaluate
 from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split as tts
 from utils import QADataset, logging_config
 
-# Setup logging
+# Logging configuration
 logging_config('log_model', 'training.log')
 
-# Function to check if rows are valid
-def is_valid_row(row):
+# Function to filter valid rows
+def filter_valid_rows(row):
     return len(row) == 2 and all(row)
 
-# Read and filter dataset
-dataset_name = 'dataset-kelas'
-valid_rows = []
-with open(f'{dataset_name}.csv', 'r', encoding='utf-8') as file:
+# Load the dataset
+num = 'dataset-kelas'
+filtered_rows = []
+with open(f'{num}.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file, delimiter='|', quoting=csv.QUOTE_NONE)
     for row in reader:
-        if is_valid_row(row):
-            valid_rows.append(row)
-df = pd.DataFrame(valid_rows, columns=['question', 'answer'])
+        if filter_valid_rows(row):
+            filtered_rows.append(row)
 
-# Split data into train and test sets
-train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
 
-# Reset index for continuous indexing
-train_df.reset_index(drop=True, inplace=True)
-test_df.reset_index(drop=True, inplace=True)
+# Split dataset into training and test sets
+train_df, test_df = tts(df, test_size=0.2, random_state=42)
 
-# Prepare dataset for training
+# Reset index to ensure continuous indexing
+train_df = train_df.reset_index(drop=True)
+test_df = test_df.reset_index(drop=True)
+
+# Prepare the dataset
 model_name = 'facebook/bart-base'
 tokenizer = BartTokenizer.from_pretrained(model_name)
 
+# Combine question and answer into a single string for training
 inputs_train = train_df['question'].tolist()
 targets_train = train_df['answer'].tolist()
 
@@ -45,7 +47,7 @@ targets_test = test_df['answer'].tolist()
 dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=160)
 dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=160)
 
-# Load the model
+# Load model
 model = BartForConditionalGeneration.from_pretrained(model_name)
 
 # Define data collator
