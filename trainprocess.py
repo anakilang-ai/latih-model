@@ -45,8 +45,8 @@ targets_train = train_df['answer'].tolist()
 inputs_test = test_df['question'].tolist()
 targets_test = test_df['answer'].tolist()
 
-dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=160)
-dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=160)
+dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=256)
+dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=256)
 
 # Load model
 model = BartForConditionalGeneration.from_pretrained(model_name)
@@ -58,8 +58,8 @@ data_collator = DataCollatorForSeq2Seq(
 )
 
 # epoch size and batchsize levels
-epoch = 20
-batch_size = 10
+epoch = 10  # Mengurangi jumlah epoch untuk eksperimen awal
+batch_size = 8  # Menyesuaikan batch size untuk menghindari out of memory
 
 # Define training arguments
 training_args = TrainingArguments(
@@ -72,8 +72,8 @@ training_args = TrainingArguments(
     weight_decay=0.01,
     logging_dir='./logs',
     logging_steps=10,
-    save_steps=160,
-    save_total_limit=2,
+    save_steps=500,  # Menyimpan checkpoint lebih sering
+    save_total_limit=5,  # Menyimpan lebih banyak checkpoint
     fp16=True,
     evaluation_strategy="epoch",
 )
@@ -85,7 +85,7 @@ generation_config = GenerationConfig(
     no_repeat_ngram_size=0,
     forced_bos_token_id=0,
     forced_eos_token_id=2,
-    max_length=160,  
+    max_length=256,  
     bos_token_id=0,
     decoder_start_token_id=2
 )
