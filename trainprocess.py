@@ -122,17 +122,17 @@ trainer = Trainer(
 # Train the model
 trainer.train()
 
-# Save the model and tokenizer
-save_path = f'model/bart_{dataset_name}_{epochs}_{batch_size}'
-model.save_pretrained(save_path)
-tokenizer.save_pretrained(save_path)
-generation_config.save_pretrained(save_path)
+# Save the model
+path = f'model/bart_coba{num}-{epoch}-{batch_size}'
+model.save_pretrained(path)
+tokenizer.save_pretrained(path)
+generation_config.save_pretrained(path)
 
-# Evaluate the model
-evaluation_results = trainer.evaluate()
+# Evaluate model
+eval_results = trainer.evaluate()
 
-# Log evaluation results
-print(f"Evaluation results: {evaluation_results}")
-logging.info(f"Model saved at: {save_path}")
-logging.info(f"Evaluation results: {evaluation_results}")
+# Print evaluation results, including accuracy
+print(f"Evaluation results: {eval_results}")
+logging.info(f"Model: {path}")
+logging.info(f"Evaluation results: {eval_results}")
 logging.info("------------------------------------------\n")
