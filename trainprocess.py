@@ -118,10 +118,9 @@ def train_model(df, model_name='facebook/bart-base', epoch=20, batch_size=10):
     trainer.train()
 
     # Save the model
-    path = f'model/bart_coba-{epoch}-{batch_size}'
-    model.save_pretrained(path)
-    tokenizer.save_pretrained(path)
-    generation_config.save_pretrained(path)
+model.save_pretrained(path)
+tokenizer.save_pretrained(path)
+generation_config.save_pretrained(path)
 
     # Evaluate model
     eval_results = trainer.evaluate()
