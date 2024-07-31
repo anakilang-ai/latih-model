@@ -5,14 +5,14 @@ import csv
 import torch
 import evaluate
 from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig
-from sklearn.model_selection import train_test_split as tts
-from utils import QADataset, logging_config
+from sklearn.model_selection import train_test_split
+from utils import QADataset, setup_logging
 
-# Logging configuration
-logging_config('log_model', 'training.log')
+# Logging setup
+setup_logging('log_model', 'training.log')
 
-# Function to filter valid rows
-def filter_valid_rows(row):
+# Function to validate rows
+def is_valid_row(row):
     return len(row) == 2 and all(row)
 
 # Load the dataset
