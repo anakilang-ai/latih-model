@@ -52,20 +52,20 @@ class BartAnswerGenerator:
         )
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-# Define the QADataset class
-class QADataset(Dataset):
-    def _init_(self, inputs, targets, tokenizer, max_length=160):  # Adjusted max_length
-        self.inputs = inputs
-        self.targets = targets
+# Question-Answer Dataset class definition
+class QuestionAnswerDataset(Dataset):
+    def __init__(self, input_texts, target_texts, tokenizer, max_length=160):  # Set max_length
+        self.input_texts = input_texts
+        self.target_texts = target_texts
         self.tokenizer = tokenizer
         self.max_length = max_length
 
-    def _len_(self):
-        return len(self.inputs)
+    def __len__(self):
+        return len(self.input_texts)
 
-    def _getitem_(self, idx):
-        input_encoding = self.tokenizer(self.inputs[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
-        target_encoding = self.tokenizer(self.targets[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
+    def __getitem__(self, index):
+        input_encoding = self.tokenizer(self.input_texts[index], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
+        target_encoding = self.tokenizer(self.target_texts[index], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
         
         input_ids = input_encoding.input_ids.squeeze().numpy()
         attention_mask = input_encoding.attention_mask.squeeze().numpy()
