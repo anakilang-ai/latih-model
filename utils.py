@@ -15,25 +15,25 @@ def configure_logging(directory, filename):
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
 
-# Define the BartGenerator class
-class BartGenerator:
-    def _init_(self, model_path):
-        self.tokenizer = BartTokenizer.from_pretrained(model_path)
-        self.model = BartForConditionalGeneration.from_pretrained(model_path)
-        self.model_path = model_path  # Store the model path
+# Bart Generator class definition
+class BartAnswerGenerator:
+    def __init__(self, model_directory):
+        self.tokenizer = BartTokenizer.from_pretrained(model_directory)
+        self.model = BartForConditionalGeneration.from_pretrained(model_directory)
+        self.model_directory = model_directory  # Save the model directory
         
-        # Load or create a GenerationConfig
-        self.generation_config = GenerationConfig.from_pretrained(model_path)
+        # Initialize or load GenerationConfig
+        self.generation_config = GenerationConfig.from_pretrained(model_directory)
         
-        # Ensure that necessary tokens are set in the generation config
+        # Set necessary tokens in the generation config if not already set
         self.generation_config.decoder_start_token_id = self.generation_config.decoder_start_token_id or self.tokenizer.bos_token_id
         self.generation_config.bos_token_id = self.generation_config.bos_token_id or self.tokenizer.bos_token_id
 
-        # Print statements to confirm the IDs
-        print(f"decoder_start_token_id is set to: {self.generation_config.decoder_start_token_id}")
-        print(f"bos_token_id is set to: {self.generation_config.bos_token_id}")
-        logging.info(f"decoder_start_token_id is set to: {self.generation_config.decoder_start_token_id}")
-        logging.info(f"bos_token_id is set to: {self.generation_config.bos_token_id}")
+        # Log and print token IDs
+        print(f"decoder_start_token_id: {self.generation_config.decoder_start_token_id}")
+        print(f"bos_token_id: {self.generation_config.bos_token_id}")
+        logging.info(f"decoder_start_token_id: {self.generation_config.decoder_start_token_id}")
+        logging.info(f"bos_token_id: {self.generation_config.bos_token_id}")
 
     def generate_answer(self, question, max_length=160):  # Adjusted max_length
         inputs = self.tokenizer(question, return_tensors='pt')
