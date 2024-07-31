@@ -2,18 +2,21 @@ import random
 
 # Daftar jawaban berdasarkan kategori
 answers = {
-    "baik": [
-        "Saya baik-baik saja, terima kasih!",
-        "Hari saya sangat menyenangkan!",
+    "greeting": [
+        "Halo! Apa kabar?",
+        "Hai, bagaimana hari Anda?",
+        "Selamat datang! Ada yang bisa saya bantu?"
     ],
-    "biasa": [
-        "dawdawdawd!",
-        "abccsadwadwa",
+    "farewell": [
+        "Terima kasih telah berbicara dengan saya. Sampai jumpa!",
+        "Selamat tinggal! Semoga hari Anda menyenangkan.",
+        "Sampai jumpa lagi! Terima kasih sudah mengobrol."
     ],
-    "lelah": [
-        "Hari saya sangat menyenangkan!",
-        "Saya baik-baik saja, terima kasih!",
-    ],
+    "default": [
+        "Maaf, saya tidak mengerti pertanyaan Anda.",
+        "Bisa jelaskan lebih lanjut?",
+        "Saya tidak yakin tentang itu. Coba tanya yang lain."
+    ]
 }
 
 def chat():
@@ -27,18 +30,15 @@ def chat():
         
         # Periksa apakah pengguna ingin keluar
         if any(keyword in user_question.lower() for keyword in exit_keywords):
-            print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
+            response = random.choice(answers["farewell"])
+            print("Bot: " + response)
             break
         
-        # Pilih jawaban berdasarkan kata kunci dalam pertanyaan
-        if 'baik' in user_question.lower():
-            response = random.choice(answers['baik'])
-        elif 'biasa' in user_question.lower():
-            response = random.choice(answers['biasa'])
-        elif 'lelah' in user_question.lower():
-            response = random.choice(answers['lelah'])
+        # Tentukan jawaban berdasarkan pola pertanyaan
+        if 'halo' in user_question.lower() or 'hai' in user_question.lower():
+            response = random.choice(answers["greeting"])
         else:
-            response = random.choice(answers['baik'])  # Default response
+            response = random.choice(answers["default"])
         
         print("Bot: " + response)
 
