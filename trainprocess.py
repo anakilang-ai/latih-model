@@ -97,27 +97,29 @@ def calculate_metrics(eval_pred):
     logits, labels = eval_pred
     if isinstance(logits, tuple):
         logits = logits[0]
-
+        
+    # Convert logits to a tensor
     logits = torch.tensor(logits)
     predictions = torch.argmax(logits, dim=-1)
     
     decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
     decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
     
-    bleu_score = bleu.compute(predictions=decoded_preds, references=[[label] for label in decoded_labels])
+    # BLEU score
+    bleu = bleu_metric.compute(predictions=decoded_preds, references=[[label] for label in decoded_labels])
 
     return {
-        "bleu": bleu_score["bleu"],
+        "bleu": bleu["bleu"],
     }
 
 # Trainer
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=test_dataset,
+    train_dataset=dataset_train,
+    eval_dataset=dataset_test,
     data_collator=data_collator,
-    compute_metrics=calculate_metrics
+    compute_metrics=compute_metrics
 )
 
 # Train the model
