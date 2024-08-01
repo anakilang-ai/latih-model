@@ -17,16 +17,16 @@ def run_interactive_session():
             break
 
         try:
-            answer = generator.generate_answer(question)
-            print(f"Jawaban: {answer}")
+            response = text_generator.generate_text(user_input)
+            print(f"Response: {response}")
 
-            # Log the result
-            logging.info(f"Model: {generator.model_path}")
-            logging.info(f"Pertanyaan: {question}")
-            logging.info(f"Jawaban: {answer}")
+            # Log the interaction
+            logging.info(f"Model Directory: {text_generator.model_directory}")
+            logging.info(f"Question: {user_input}")
+            logging.info(f"Response: {response}")
             logging.info("------------------------------------------\n")
-        except ValueError as e:
-            print(e)
+        except ValueError as error:
+            print(error)
 
-if name == "main":
-    main()
+if __name__ == "__main__":
+    run_interactive_session()
