@@ -78,8 +78,8 @@ training_args = TrainingArguments(
     evaluation_strategy="epoch",
 )
 
-# Define generation config
-generation_config = GenerationConfig(
+# Mendefinisikan konfigurasi generasi
+gen_config = GenerationConfig(
     early_stopping=True,
     num_beams=5, 
     no_repeat_ngram_size=0,
@@ -90,14 +90,14 @@ generation_config = GenerationConfig(
     decoder_start_token_id=2
 )
 
-# Load metrics
-bleu_metric = evaluate.load("bleu")
+# Memuat metrik
+bleu = evaluate.load("bleu")
 
-def compute_metrics(eval_pred):
+def calculate_metrics(eval_pred):
     logits, labels = eval_pred
     if isinstance(logits, tuple):
         logits = logits[0]
-
+        
     # Convert logits to a tensor
     logits = torch.tensor(logits)
     predictions = torch.argmax(logits, dim=-1)
