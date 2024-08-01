@@ -34,22 +34,22 @@ class TextGenerator:
         logging.info(f"decoder_start_token_id: {self.generation_config.decoder_start_token_id}")
         logging.info(f"bos_token_id: {self.generation_config.bos_token_id}")
 
-    def generate_answer(self, question, max_length=160):  # Adjusted max_length
-        inputs = self.tokenizer(question, return_tensors='pt')
+    def generate_text(self, prompt, max_length=160):
+        tokenized_input = self.tokenizer(prompt, return_tensors='pt')
         
         # Use the generation configuration directly from the model config
-        outputs = self.model.generate(
-            inputs['input_ids'],
+        generated_ids = self.model.generate(
+            tokenized_input['input_ids'],
             early_stopping=True,
-            num_beams=5, 
+            num_beams=5,
             no_repeat_ngram_size=0,
             forced_bos_token_id=0,
             forced_eos_token_id=2,
-            max_length=160,  
+            max_length=max_length,
             bos_token_id=0,
             decoder_start_token_id=2
         )
-        return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+        return self.tokenizer.decode(generated_ids[0], skip_special_tokens=True)
 
 # Define the QADataset class
 class QADataset(Dataset):
