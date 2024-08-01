@@ -1,45 +1,141 @@
-import os
+import pandas as pd
+import numpy as np
 import logging
+import csv
+import torch
+import evaluate
+import os
+from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig
+from sklearn.model_selection import train_test_split as tts
+from utils import QADataset, logging_config
 
-# Define the save path for the model, tokenizer, and generation configuration
-model_save_path = f'model/bart_coba{num}-{epoch}-{batch_size}'
+# Logging configuration
+logging_config('log_model', 'training.log')
 
-# Ensure the save directory exists
-os.makedirs(model_save_path, exist_ok=True)
+# Function to filter valid rows
+def filter_valid_rows(row):
+    return len(row) == 2 and all(row)
 
-def save_component(component, path, description):
-    try:
-        # Save the component
-        component.save_pretrained(path)
-        
-        # Check if the file was saved
-        if os.path.exists(path):
-            logging.info(f"{description} successfully saved to: {path}")
-        else:
-            logging.warning(f"{description} file not found at: {path}")
+# Load the dataset
+num = 'dataset-kelas'
+filtered_rows = []
+with open(f'{num}.csv', 'r', encoding='utf-8') as file:
+    reader = csv.reader(file, delimiter='|', quoting=csv.QUOTE_NONE)
+    for row in reader:
+        if filter_valid_rows(row):
+            filtered_rows.append(row)
+
+df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
+
+# Split dataset into training and test sets
+train_df, test_df = tts(df, test_size=0.2, random_state=42)
+
+# Reset index to ensure continuous indexing
+train_df = train_df.reset_index(drop=True)
+test_df = test_df.reset_index(drop=True)
+
+# Prepare the dataset
+model_name = 'facebook/bart-base'
+tokenizer = BartTokenizer.from_pretrained(model_name)
+
+# Combine question and answer into a single string for training
+inputs_train = train_df['question'].tolist()
+targets_train = train_df['answer'].tolist()
+
+inputs_test = test_df['question'].tolist()
+targets_test = test_df['answer'].tolist()
+
+dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=160)
+dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=160)
+
+# Load model
+model = BartForConditionalGeneration.from_pretrained(model_name)
+
+# Define data collator
+data_collator = DataCollatorForSeq2Seq(
+    tokenizer=tokenizer,
+    model=model,
+)
+
+# epoch size and batchsize levels
+epoch = 20
+batch_size = 10
+
+# Define training arguments
+training_args = TrainingArguments(
+    output_dir=f'./result/results_coba{num}-{epoch}-{batch_size}',
+    num_train_epochs=epoch,
+    per_device_train_batch_size=batch_size,
+    per_device_eval_batch_size=4,
+    learning_rate=5e-5,
+    warmup_steps=160,
+    weight_decay=0.01,
+    logging_dir='./logs',
+    logging_steps=10,
+    save_steps=160,
+    save_total_limit=2,
+    fp16=True,
+    evaluation_strategy="epoch",
+)
+
+# Define generation config
+generation_config = GenerationConfig(
+    early_stopping=True,
+    num_beams=5, 
+    no_repeat_ngram_size=0,
+    forced_bos_token_id=0,
+    forced_eos_token_id=2,
+    max_length=160,  
+    bos_token_id=0,
+    decoder_start_token_id=2
+)
+
+# Load metrics
+bleu_metric = evaluate.load("bleu")
+
+def compute_metrics(eval_pred):
+    logits, labels = eval_pred
+    if isinstance(logits, tuple):
+        logits = logits[0]
+
+    # Convert logits to a tensor
+    logits = torch.tensor(logits)
+    predictions = torch.argmax(logits, dim=-1)
     
-    except Exception as e:
-        # Detailed error logging
-        logging.error(f"Error saving {description} to {path}: {str(e)}")
-        print(f"Error saving {description} to {path}: {str(e)}")
+    decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+    decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+    
+    # BLEU score
+    bleu = bleu_metric.compute(predictions=decoded_preds, references=[[label] for label in decoded_labels])
 
-# Define file paths
-model_file_path = os.path.join(model_save_path, 'pytorch_model.bin')
-tokenizer_path = os.path.join(model_save_path, 'tokenizer')
-generation_config_path = os.path.join(model_save_path, 'generation_config')
+    return {
+        "bleu": bleu["bleu"],
+    }
+
+# Trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=dataset_train,
+    eval_dataset=dataset_test,
+    data_collator=data_collator,
+    compute_metrics=compute_metrics
+)
+
+# Train the model
+trainer.train()
 
 # Save the model
-save_component(model, model_file_path, 'Model')
+path = f'model/bart_coba{num}-{epoch}-{batch_size}'
+model.save_pretrained(path)
+tokenizer.save_pretrained(path)
+generation_config.save_pretrained(path)
 
-# Save the tokenizer (tokenizer.save_pretrained already saves the tokenizer config)
-save_component(tokenizer, tokenizer_path, 'Tokenizer')
+# Evaluate model
+eval_results = trainer.evaluate()
 
-# Save the generation configuration
-save_component(generation_config, generation_config_path, 'Generation configuration')
-
-# Optional: Verify the directory contents
-if os.path.isdir(model_save_path):
-    saved_files = os.listdir(model_save_path)
-    logging.info(f"Directory {model_save_path} contains: {saved_files}")
-else:
-    logging.warning(f"Save directory {model_save_path} does not exist.")
+# Print evaluation results, including accuracy
+print(f"Evaluation results: {eval_results}")
+logging.info(f"Model: {path}")
+logging.info(f"Evaluation results: {eval_results}")
+logging.info("------------------------------------------\n")
