@@ -6,24 +6,24 @@ import torch
 import evaluate
 import os
 from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split as tts
 from utils import QADataset, logging_config
 
-# Konfigurasi logging
+# Logging configuration
 logging_config('log_model', 'training.log')
 
-# Fungsi untuk memfilter baris yang valid
-def is_valid_row(row):
+# Function to filter valid rows
+def filter_valid_rows(row):
     return len(row) == 2 and all(row)
 
-# Memuat dataset
-dataset_name = 'dataset-kelas'
-valid_rows = []
-with open(f'{dataset_name}.csv', 'r', encoding='utf-8') as file:
+# Load the dataset
+num = 'dataset-kelas'
+filtered_rows = []
+with open(f'{num}.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file, delimiter='|', quoting=csv.QUOTE_NONE)
     for row in reader:
-        if is_valid_row(row):
-            valid_rows.append(row)
+        if filter_valid_rows(row):
+            filtered_rows.append(row)
 
 df = pd.DataFrame(filtered_rows, columns=['question', 'answer'])
 
