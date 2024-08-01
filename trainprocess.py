@@ -9,22 +9,32 @@ os.makedirs(model_save_path, exist_ok=True)
 
 def save_component(component, path, description):
     try:
+        # Save the component
         component.save_pretrained(path)
+        
+        # Check if the file was saved
         if os.path.exists(path):
             logging.info(f"{description} successfully saved to: {path}")
         else:
-            logging.warning(f"{description} file not found after saving: {path}")
+            logging.warning(f"{description} file not found at: {path}")
+    
     except Exception as e:
-        logging.error(f"Error saving {description}: {str(e)}")
-        print(f"Error saving {description}: {str(e)}")
+        # Detailed error logging
+        logging.error(f"Error saving {description} to {path}: {str(e)}")
+        print(f"Error saving {description} to {path}: {str(e)}")
 
-# Save the model, tokenizer, and generation configuration
-model_path = os.path.join(model_save_path, 'pytorch_model.bin')
-tokenizer_path = os.path.join(model_save_path, 'tokenizer_config.json')
-generation_config_path = os.path.join(model_save_path, 'generation_config.json')
+# Define file paths
+model_file_path = os.path.join(model_save_path, 'pytorch_model.bin')
+tokenizer_path = os.path.join(model_save_path, 'tokenizer')
+generation_config_path = os.path.join(model_save_path, 'generation_config')
 
-save_component(model, model_path, 'Model')
+# Save the model
+save_component(model, model_file_path, 'Model')
+
+# Save the tokenizer (tokenizer.save_pretrained already saves the tokenizer config)
 save_component(tokenizer, tokenizer_path, 'Tokenizer')
+
+# Save the generation configuration
 save_component(generation_config, generation_config_path, 'Generation configuration')
 
 # Optional: Verify the directory contents
