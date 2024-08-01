@@ -120,20 +120,20 @@ trainer = Trainer(
     compute_metrics=calculate_metrics
 )
 
-# Train the model
+# Melatih model
 trainer.train()
 
-# Save the model
-path = f'model/bart_coba{num}-{epoch}-{batch_size}'
-model.save_pretrained(path)
-tokenizer.save_pretrained(path)
-generation_config.save_pretrained(path)
+# Menyimpan model
+save_path = f'model/bart_{dataset_name}_{num_epochs}_{train_batch_size}'
+model.save_pretrained(save_path)
+tokenizer.save_pretrained(save_path)
+gen_config.save_pretrained(save_path)
 
-# Evaluate model
-eval_results = trainer.evaluate()
+# Evaluasi model
+evaluation_results = trainer.evaluate()
 
-# Print evaluation results, including accuracy
-print(f"Evaluation results: {eval_results}")
-logging.info(f"Model: {path}")
-logging.info(f"Evaluation results: {eval_results}")
+# Mencetak hasil evaluasi, termasuk akurasi
+print(f"Hasil evaluasi: {evaluation_results}")
+logging.info(f"Model: {save_path}")
+logging.info(f"Hasil evaluasi: {evaluation_results}")
 logging.info("------------------------------------------\n")
