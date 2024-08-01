@@ -14,17 +14,17 @@ def start_chat():
     print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
     
     while True:
-        # Ambil pertanyaan pengguna
-        user_input = input("Anda: ")
+        # Minta pengguna untuk memasukkan pertanyaan
+        user_question = input("Anda: ")
         
         # Periksa apakah pengguna ingin keluar
-        if user_input.lower() == 'keluar':
+        if user_question.lower() == 'keluar':
             print("Bot: Terima kasih sudah mengobrol! Sampai jumpa!")
             break
         
-        # Pilih jawaban acak dari daftar
-        bot_response = random.choice(responses_list)
-        print("Bot: " + bot_response)
+        # Pilih jawaban acak
+        response = random.choice(random_answers)
+        print("Bot: " + response)
 
-if __name__ == "__main__":
-    start_chat()
+if name == "main":
+    main()
