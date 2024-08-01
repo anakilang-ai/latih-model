@@ -26,8 +26,10 @@ class BartGenerator:
         self.generation_config = GenerationConfig.from_pretrained(model_path)
         
         # Ensure that necessary tokens are set in the generation config
-        self.generation_config.decoder_start_token_id = self.generation_config.decoder_start_token_id or self.tokenizer.bos_token_id
-        self.generation_config.bos_token_id = self.generation_config.bos_token_id or self.tokenizer.bos_token_id
+        if self.generation_config.decoder_start_token_id is None:
+            self.generation_config.decoder_start_token_id = self.tokenizer.bos_token_id
+        if self.generation_config.bos_token_id is None:
+            self.generation_config.bos_token_id = self.tokenizer.bos_token_id
 
         # Print statements to confirm the IDs
         print(f"decoder_start_token_id is set to: {self.generation_config.decoder_start_token_id}")
@@ -51,6 +53,7 @@ class BartGenerator:
             decoder_start_token_id=2
         )
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+
 
 # Define the QADataset class
 class QADataset(Dataset):
