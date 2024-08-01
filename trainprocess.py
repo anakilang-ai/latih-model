@@ -57,15 +57,15 @@ data_collator = DataCollatorForSeq2Seq(
     model=model,
 )
 
-# Ukuran epoch dan batch size
-num_epochs = 20
-train_batch_size = 10
+# epoch size and batchsize levels
+epoch = 20
+batch_size = 10
 
-# Mendefinisikan argumen pelatihan
+# Define training arguments
 training_args = TrainingArguments(
-    output_dir=f'./result/results_{dataset_name}_{num_epochs}_{train_batch_size}',
-    num_train_epochs=num_epochs,
-    per_device_train_batch_size=train_batch_size,
+    output_dir=f'./result/results_coba{num}-{epoch}-{batch_size}',
+    num_train_epochs=epoch,
+    per_device_train_batch_size=batch_size,
     per_device_eval_batch_size=4,
     learning_rate=5e-5,
     warmup_steps=160,
