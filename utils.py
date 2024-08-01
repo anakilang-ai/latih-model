@@ -17,11 +17,11 @@ def setup_logging(directory, filename):
     )
 
 # Define the TextGenerator class
-class TextGenerator:
-    def __init__(self, model_directory):
-        self.tokenizer = BartTokenizer.from_pretrained(model_directory)
-        self.model = BartForConditionalGeneration.from_pretrained(model_directory)
-        self.model_directory = model_directory  # Store the model path
+class BartGenerator:
+    def init(self, model_path):
+        self.tokenizer = BartTokenizer.from_pretrained(model_path)
+        self.model = BartForConditionalGeneration.from_pretrained(model_path)
+        self.model_path = model_path  # Store the model path
         
         # Load or create a GenerationConfig
         self.generation_config = GenerationConfig.from_pretrained(model_path)
