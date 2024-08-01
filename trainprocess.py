@@ -1,4 +1,5 @@
 import os
+import logging
 
 # Define the save path for the model, tokenizer, and generation configuration
 model_save_path = f'model/bart_coba{num}-{epoch}-{batch_size}'
@@ -6,35 +7,25 @@ model_save_path = f'model/bart_coba{num}-{epoch}-{batch_size}'
 # Ensure the save directory exists
 os.makedirs(model_save_path, exist_ok=True)
 
-try:
-    # Save the model
-    model_path = os.path.join(model_save_path, 'pytorch_model.bin')
-    model.save_pretrained(model_save_path)
-    if os.path.isfile(model_path):
-        logging.info(f"Model saved successfully to: {model_path}")
-    else:
-        logging.warning(f"Model file not found after saving: {model_path}")
+def save_component(component, path, description):
+    try:
+        component.save_pretrained(path)
+        if os.path.exists(path):
+            logging.info(f"{description} successfully saved to: {path}")
+        else:
+            logging.warning(f"{description} file not found after saving: {path}")
+    except Exception as e:
+        logging.error(f"Error saving {description}: {str(e)}")
+        print(f"Error saving {description}: {str(e)}")
 
-    # Save the tokenizer
-    tokenizer_path = os.path.join(model_save_path, 'tokenizer_config.json')
-    tokenizer.save_pretrained(model_save_path)
-    if os.path.isfile(tokenizer_path):
-        logging.info(f"Tokenizer saved successfully to: {tokenizer_path}")
-    else:
-        logging.warning(f"Tokenizer file not found after saving: {tokenizer_path}")
+# Save the model, tokenizer, and generation configuration
+model_path = os.path.join(model_save_path, 'pytorch_model.bin')
+tokenizer_path = os.path.join(model_save_path, 'tokenizer_config.json')
+generation_config_path = os.path.join(model_save_path, 'generation_config.json')
 
-    # Save the generation configuration
-    generation_config_path = os.path.join(model_save_path, 'generation_config.json')
-    generation_config.save_pretrained(model_save_path)
-    if os.path.isfile(generation_config_path):
-        logging.info(f"Generation configuration saved successfully to: {generation_config_path}")
-    else:
-        logging.warning(f"Generation configuration file not found after saving: {generation_config_path}")
-
-except Exception as e:
-    # Log the error with detailed information
-    logging.error(f"An error occurred while saving the model, tokenizer, or generation configuration: {str(e)}")
-    print(f"An error occurred while saving the model, tokenizer, or generation configuration: {str(e)}")
+save_component(model, model_path, 'Model')
+save_component(tokenizer, tokenizer_path, 'Tokenizer')
+save_component(generation_config, generation_config_path, 'Generation configuration')
 
 # Optional: Verify the directory contents
 if os.path.isdir(model_save_path):
