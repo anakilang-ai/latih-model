@@ -24,17 +24,15 @@ class TextGenerator:
         self.model_directory = model_directory  # Store the model path
         
         # Load or create a GenerationConfig
-        self.generation_config = GenerationConfig.from_pretrained(model_path)
+        self.generation_config = GenerationConfig.from_pretrained(model_directory)
         
-        # Ensure that necessary tokens are set in the generation config
+        # Ensure necessary tokens are set in the generation config
         self.generation_config.decoder_start_token_id = self.generation_config.decoder_start_token_id or self.tokenizer.bos_token_id
         self.generation_config.bos_token_id = self.generation_config.bos_token_id or self.tokenizer.bos_token_id
 
-        # Print statements to confirm the IDs
-        print(f"decoder_start_token_id is set to: {self.generation_config.decoder_start_token_id}")
-        print(f"bos_token_id is set to: {self.generation_config.bos_token_id}")
-        logging.info(f"decoder_start_token_id is set to: {self.generation_config.decoder_start_token_id}")
-        logging.info(f"bos_token_id is set to: {self.generation_config.bos_token_id}")
+        # Log the token IDs
+        logging.info(f"decoder_start_token_id: {self.generation_config.decoder_start_token_id}")
+        logging.info(f"bos_token_id: {self.generation_config.bos_token_id}")
 
     def generate_answer(self, question, max_length=160):  # Adjusted max_length
         inputs = self.tokenizer(question, return_tensors='pt')
