@@ -38,20 +38,20 @@ test_df = test_df.reset_index(drop=True)
 model_name = 'facebook/bart-base'
 tokenizer = BartTokenizer.from_pretrained(model_name)
 
-# Menggabungkan pertanyaan dan jawaban menjadi satu string untuk pelatihan
-train_inputs = train_df['question'].tolist()
-train_targets = train_df['answer'].tolist()
+# Combine question and answer into a single string for training
+inputs_train = train_df['question'].tolist()
+targets_train = train_df['answer'].tolist()
 
-test_inputs = test_df['question'].tolist()
-test_targets = test_df['answer'].tolist()
+inputs_test = test_df['question'].tolist()
+targets_test = test_df['answer'].tolist()
 
-train_dataset = QADataset(train_inputs, train_targets, tokenizer, max_length=160)
-test_dataset = QADataset(test_inputs, test_targets, tokenizer, max_length=160)
+dataset_train = QADataset(inputs_train, targets_train, tokenizer, max_length=160)
+dataset_test = QADataset(inputs_test, targets_test, tokenizer, max_length=160)
 
-# Memuat model
+# Load model
 model = BartForConditionalGeneration.from_pretrained(model_name)
 
-# Mendefinisikan data collator
+# Define data collator
 data_collator = DataCollatorForSeq2Seq(
     tokenizer=tokenizer,
     model=model,
