@@ -51,27 +51,27 @@ class TextGenerator:
         )
         return self.tokenizer.decode(generated_ids[0], skip_special_tokens=True)
 
-# Define the QADataset class
-class QADataset(Dataset):
-    def init(self, inputs, targets, tokenizer, max_length=160):  # Adjusted max_length
-        self.inputs = inputs
-        self.targets = targets
+# Define the TextDataset class
+class TextDataset(Dataset):
+    def __init__(self, source_texts, target_texts, tokenizer, max_length=160):
+        self.source_texts = source_texts
+        self.target_texts = target_texts
         self.tokenizer = tokenizer
         self.max_length = max_length
 
-    def len(self):
-        return len(self.inputs)
+    def __len__(self):
+        return len(self.source_texts)
 
-    def getitem(self, idx):
-        input_encoding = self.tokenizer(self.inputs[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
-        target_encoding = self.tokenizer(self.targets[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
+    def __getitem__(self, idx):
+        source_encoding = self.tokenizer(self.source_texts[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
+        target_encoding = self.tokenizer(self.target_texts[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
         
-        input_ids = input_encoding.input_ids.squeeze().numpy()
-        attention_mask = input_encoding.attention_mask.squeeze().numpy()
-        labels = target_encoding.input_ids.squeeze().numpy()
+        source_ids = source_encoding.input_ids.squeeze().numpy()
+        attention_mask = source_encoding.attention_mask.squeeze().numpy()
+        target_ids = target_encoding.input_ids.squeeze().numpy()
 
         return {
-            "input_ids": torch.tensor(input_ids, dtype=torch.long),
+            "input_ids": torch.tensor(source_ids, dtype=torch.long),
             "attention_mask": torch.tensor(attention_mask, dtype=torch.long),
-            "labels": torch.tensor(labels, dtype=torch.long)
+            "labels": torch.tensor(target_ids, dtype=torch.long)
         }
