@@ -3,6 +3,7 @@ import os
 import torch
 from torch.utils.data import Dataset
 from transformers import BartTokenizer, BartForConditionalGeneration, GenerationConfig
+import numpy as np
 
 # Logging configuration
 def logging_config(log_dir, log_filename):
@@ -17,7 +18,7 @@ def logging_config(log_dir, log_filename):
 
 # Define the BartGenerator class
 class BartGenerator:
-    def __init__(self, model_path):
+    def _init_(self, model_path):
         self.tokenizer = BartTokenizer.from_pretrained(model_path)
         self.model = BartForConditionalGeneration.from_pretrained(model_path)
         self.model_path = model_path  # Store the model path
@@ -54,16 +55,16 @@ class BartGenerator:
 
 # Define the QADataset class
 class QADataset(Dataset):
-    def __init__(self, inputs, targets, tokenizer, max_length=160):  # Adjusted max_length
+    def _init_(self, inputs, targets, tokenizer, max_length=160):  # Adjusted max_length
         self.inputs = inputs
         self.targets = targets
         self.tokenizer = tokenizer
         self.max_length = max_length
 
-    def __len__(self):
+    def _len_(self):
         return len(self.inputs)
 
-    def __getitem__(self, idx):
+    def _getitem_(self, idx):
         input_encoding = self.tokenizer(self.inputs[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
         target_encoding = self.tokenizer(self.targets[idx], truncation=True, padding="max_length", max_length=self.max_length, return_tensors='pt')
         
