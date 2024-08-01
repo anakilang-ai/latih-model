@@ -1,12 +1,12 @@
 import logging
-import os
-from utils import logging_config, BartGenerator, generate_answer
+from utils import logging_config, BartGenerator
 from trainprocess import path
 
-
+# Configuring logging
 logging_config('log_model', 'generator_test.log')
 
 def main():
+    # Initializing the generator
     generator = BartGenerator(path)
 
     while True:
@@ -26,7 +26,8 @@ def main():
             logging.info(f"Jawaban: {answer}")
             logging.info("------------------------------------------\n")
         except ValueError as e:
-            print(e)
+            print(f"Error: {e}")
+            logging.error(f"Error: {e}")
 
-if name == "main":
+if __name__ == "__main__":
     main()
