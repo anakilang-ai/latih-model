@@ -9,6 +9,7 @@ random_answers = [
     "Saya baik-baik saja, terima kasih!",
     "Hari saya sangat menyenangkan!",
 ]
+
 def main():
     print("Selamat datang di Game Chat! Ketik 'keluar' untuk mengakhiri obrolan.")
     
@@ -22,8 +23,11 @@ def main():
             break
         
         # Pilih jawaban acak
-        response = random.choice(random_answers)
+        response = get_random_response(random_answers)
         print("Bot: " + response)
+
+def get_random_response(answers_list):
+    return random.choice(answers_list)
 
 if __name__ == "__main__":
     main()
