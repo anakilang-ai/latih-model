@@ -5,23 +5,23 @@ from torch.utils.data import Dataset
 from transformers import BartTokenizer, BartForConditionalGeneration, GenerationConfig
 import numpy as np
 
-# Logging configuration
-def logging_config(log_dir, log_filename):
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
+# Logging setup function
+def setup_logging(directory, filename):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
     logging.basicConfig(
-        filename=f'{log_dir}/{log_filename}',
+        filename=f'{directory}/{filename}',
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
 
-# Define the BartGenerator class
-class BartGenerator:
-    def init(self, model_path):
-        self.tokenizer = BartTokenizer.from_pretrained(model_path)
-        self.model = BartForConditionalGeneration.from_pretrained(model_path)
-        self.model_path = model_path  # Store the model path
+# Define the TextGenerator class
+class TextGenerator:
+    def __init__(self, model_directory):
+        self.tokenizer = BartTokenizer.from_pretrained(model_directory)
+        self.model = BartForConditionalGeneration.from_pretrained(model_directory)
+        self.model_directory = model_directory  # Store the model path
         
         # Load or create a GenerationConfig
         self.generation_config = GenerationConfig.from_pretrained(model_path)
