@@ -5,7 +5,14 @@ import csv
 import torch
 import evaluate
 import os
-from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments, DataCollatorForSeq2Seq, GenerationConfig
+from transformers import (
+    BartTokenizer,
+    BartForConditionalGeneration,
+    Trainer,
+    TrainingArguments,
+    DataCollatorForSeq2Seq,
+    GenerationConfig
+)
 from sklearn.model_selection import train_test_split as tts
 from utils import QADataset, logging_config
 
@@ -136,17 +143,17 @@ def main():
     trainer.train()
 
     # Save the model and tokenizer
-    path = f'model/bart_coba{num}-{epoch}-{batch_size}'
-    model.save_pretrained(path)
-    tokenizer.save_pretrained(path)
-    generation_config.save_pretrained(path)
+    model_save_path = f'model/bart_coba{num}-{epoch}-{batch_size}'
+    model.save_pretrained(model_save_path)
+    tokenizer.save_pretrained(model_save_path)
+    generation_config.save_pretrained(model_save_path)
 
     # Evaluate model
     eval_results = trainer.evaluate()
 
     # Print and log evaluation results
     print(f"Evaluation results: {eval_results}")
-    logging.info(f"Model: {path}")
+    logging.info(f"Model saved to: {model_save_path}")
     logging.info(f"Evaluation results: {eval_results}")
     logging.info("------------------------------------------\n")
 
