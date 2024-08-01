@@ -7,9 +7,13 @@ logging_config('log_model', 'generator_test.log')
 
 def main():
     # Initialize the generator
-    generator = BartGenerator(path)
-
-    logging.info("Generator initialized successfully.")
+    try:
+        generator = BartGenerator(path)
+        logging.info("Generator initialized successfully.")
+    except Exception as e:
+        logging.error(f"Failed to initialize the generator: {e}")
+        print(f"Error initializing the generator: {e}")
+        return
 
     while True:
         question = input("Masukkan pertanyaan (atau ketik 'exit' untuk keluar): ").strip()
@@ -28,11 +32,11 @@ def main():
             logging.info(f"Model Path: {generator.model_path}")
             logging.info(f"Pertanyaan: {question}")
             logging.info(f"Jawaban: {answer}")
-            logging.info("------------------------------------------\n")
+            logging.info("Response successfully generated and logged.")
         except Exception as e:
             # Log the error with a detailed message
-            print(f"Error: {e}")
             logging.error(f"An error occurred while generating the answer. Details: {e}")
+            print(f"Error: {e}")
 
 if __name__ == "__main__":
     main()
